@@ -1,0 +1,22 @@
+version: '3.9'
+
+services:
+  db:
+    image: postgres:14.2-alpine
+    container_name: foodplanner_db
+    ports:
+      - 5432:5432
+    env_file:
+      - .env
+    volumes:
+      - ./docker/development/postgres/data/:/var/lib/postgresql/data/
+
+  pgAdmin:
+    image: dpage/pgadmin4:6.8
+    container_name: foodplanner_pgadmin
+    ports:
+      - 8081:80
+    env_file:
+      - .env
+    volumes:
+      - ./docker/development/pgadmin/data:/var/lib/pgadmin
