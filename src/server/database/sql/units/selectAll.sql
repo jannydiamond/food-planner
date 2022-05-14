@@ -1,4 +1,4 @@
 /*
     Gets all units
 */
-SELECT * from units
+SELECT * FROM units
