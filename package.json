@@ -4,17 +4,20 @@
   "license": "MIT",
   "scripts": {
     "build:server": "tsc -p tsconfig.server.json",
-    "copy:db": "cp -R src/server/database/ build/server/database/",
+    "copy:db": "cp -R src/server/database/sql/ build/server/database/sql/",
     "start:server": "yarn build:server && yarn copy:db && node build/server/index.js",
     "dev": "concurrently \"npx tsc --watch\" \"nodemon -q build/server/index.js\""
   },
   "dependencies": {
+    "@types/bluebird": "^3.5.36",
     "@types/express": "^4.17.13",
     "@types/node": "^17.0.31",
+    "bluebird": "^3.7.2",
     "concurrently": "^7.1.0",
     "dotenv": "^16.0.1",
     "express": "^4.18.1",
     "nodemon": "^2.0.16",
+    "pg-monitor": "^1.4.1",
     "pg-promise": "^10.11.1",
     "typescript": "^4.6.4"
   }
