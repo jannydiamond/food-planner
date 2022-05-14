@@ -19,7 +19,6 @@ const sql = (file: string): QueryFile => {
 }
 
 export const ingredients = {
-  create: sql('ingredients/create.sql'),
   empty: sql('ingredients/empty.sql'),
   drop: sql('ingredients/drop.sql'),
   add: sql('ingredients/add.sql'),
@@ -29,8 +28,6 @@ export const ingredients = {
 }
 
 export const units = {
-  create: sql('units/create.sql'),
-  init: sql('units/init.sql'),
   empty: sql('units/empty.sql'),
   drop: sql('units/drop.sql'),
   add: sql('units/add.sql'),

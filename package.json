@@ -6,7 +6,7 @@
     "build:server": "node ./buildServer.js",
     "run:server": "node build/index.js",
     "start:server": "yarn build:server && yarn run:server",
-    "check-types": "tsc --noEmit",
+    "check:types": "tsc --noEmit",
     "generate:db:types": "schemats postgres postgres://foodplanner:foodplanner@localhost/foodplanner?sslmode=disable -c -e -o ./src/server/database/models.ts"
   },
   "dependencies": {

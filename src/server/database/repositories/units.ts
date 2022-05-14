@@ -20,11 +20,6 @@ export class UnitsRepository {
       */
   }
 
-  // Creates the table
-  async create(): Promise<null> {
-    return this.db.none(sql.create)
-  }
-
   // Drops the table
   async drop(): Promise<null> {
     return this.db.none(sql.drop)
