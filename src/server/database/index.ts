@@ -17,7 +17,6 @@ type ExtendedProtocol = IDatabase<IExtensions> & IExtensions
 const initOptions: IInitOptions<IExtensions> = {
   // Using a custom promise library, instead of the default ES6 Promise:
   promiseLib: promise,
-  capSQL: true,
 
   // Extending the database protocol with our custom repositories;
   // API: http://vitaly-t.github.io/pg-promise/global.html#event:extend
