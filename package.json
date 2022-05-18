@@ -4,8 +4,9 @@
   "license": "MIT",
   "scripts": {
     "build:server": "tsc -p tsconfig.server.json",
-    "copy:db": "cp -R src/server/database/sql/ build/server/database/sql/",
-    "generate:db:types": "schemats postgres $(grep POSTGRES_DB_URL .env | cut -d '=' -f 2) -c -e -o ./src/server/database/models.ts",
+    "copy:db:local": "cp -R src/server/database/sql/ build/server/database/sql/",
+    "copy:db": "cp -R src/database/sql/ build/server/database/",
+    "generate:db:types": "schemats postgres postgres://foodplanner:foodplanner@localhost/foodplanner?sslmode=disable -c -e -o ./src/server/database/models.ts",
     "start:server": "yarn build:server && yarn copy:db && node build/server/index.js",
     "dev": "concurrently \"npx tsc --watch\" \"nodemon -q build/server/index.js\""
   },

@@ -5,8 +5,8 @@ import unitsRouter from './routes/units'
 
 const app: Express = express()
 
-const hostname = 'localhost'
-const port = 3000
+const hostname = process.env.HOST ? process.env.HOST : '0.0.0.0'
+const port = process.env.PORT ? parseInt(process.env.PORT) : 8080
 
 const apiVersion = 'v1'
 const basePath = `/api/${apiVersion}`

@@ -27,3 +27,6 @@ yarn-error.log*
 docker/development/postgres
 docker/development/pgadmin
 db-errors.log*
+
+caddy_data/
+caddy_config/

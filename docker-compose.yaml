@@ -1,22 +1,67 @@
 version: '3.9'
 
 services:
+  caddy:
+    image: caddy:2.5.1-alpine
+    container_name: foodplanner_proxy
+    restart: unless-stopped
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - ./docker/development/proxy/Caddyfile:/etc/caddy/Caddyfile
+      - ./docker/development/proxy/caddy_data:/data
+      - ./docker/development/proxy/caddy_config:/config
+    networks:
+      - caddy
+
   db:
     image: postgres:14.2-alpine
     container_name: foodplanner_db
     ports:
       - 5432:5432
-    env_file:
-      - .env
+    environment:
+      POSTGRES_PASSWORD: foodplanner
+      POSTGRES_USER: foodplanner
+      POSTGRES_DB: foodplanner
     volumes:
       - ./docker/development/postgres/data/:/var/lib/postgresql/data/
+    networks:
+      - backend
+      - default # so we can access/inspect the db from the host system
 
-  pgAdmin:
-    image: dpage/pgadmin4:6.8
-    container_name: foodplanner_pgadmin
-    ports:
-      - 8081:80
-    env_file:
-      - .env
+  server:
+    image: foodplanner-server
+    container_name: foodplanner_server
+    build:
+      context: ./
+      dockerfile: docker/development/server/Dockerfile
+
+    environment:
+      NODE_ENV: development
+      POSTGRES_PASSWORD: foodplanner
+      POSTGRES_USER: foodplanner
+      POSTGRES_DB: foodplanner
+
+    security_opt:
+      - no-new-privileges
+      
+    cap_drop:
+      - NET_ADMIN
+      - SYS_ADMIN
+
+    depends_on:
+      - db
+
+    networks:
+      - backend
+      - caddy
+
     volumes:
-      - ./docker/development/pgadmin/data:/var/lib/pgadmin
+      - ./src/server:/server/src
+      - ./node_modules:/server/node_modules
+
+networks:
+  backend:
+    internal: true
+  caddy:
