@@ -1,0 +1,6 @@
+foodplanner.janett-salzmann.de
+
+# Regular API
+handle /api/* {
+  reverse_proxy server:8080
+}
