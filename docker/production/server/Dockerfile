@@ -10,6 +10,8 @@ USER node
 COPY ./package.json ./
 COPY ./yarn.lock ./
 
+COPY ./src/server ./
+
 RUN yarn
 
 COPY ./tsconfig.json ./
