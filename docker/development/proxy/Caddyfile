@@ -1,0 +1,15 @@
+{
+  debug
+  auto_https off
+}
+
+:80 {
+  log {
+    output stdout
+  }
+
+  # Regular API
+  handle /api/* {
+    reverse_proxy server:8080
+  }
+}

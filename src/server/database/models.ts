@@ -1,4 +1,3 @@
-
 /**
  * AUTO-GENERATED FILE @ Tue, 17 May 2022 11:10:40 GMT - DO NOT EDIT!
  *
@@ -7,25 +6,23 @@
  *
  */
 
-
-
-export interface Ingredients { 
+export interface Ingredient {
   id: string
   name: string
   inventoryAmount?: number | null
   inventoryUnitId?: number | null
   createdAt?: Date | null
-  updatedAt: Date 
+  updatedAt: Date
 }
 
-export interface Units { 
+export interface Unit {
   id: number
   name: string
   createdAt?: Date | null
-  updatedAt: Date 
+  updatedAt: Date
 }
 
 export interface Tables {
-  ingredients: Ingredients,
-  units: Units
+  ingredients: Ingredient
+  units: Unit
 }
