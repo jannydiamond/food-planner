@@ -50,7 +50,7 @@ services:
 
     build:
       context: ../../
-      dockerfile: ./server/Dockerfile
+      dockerfile: docker/production/server/Dockerfile
 
     environment:
       NODE_ENV: production
@@ -64,10 +64,6 @@ services:
     networks:
       - backend
       - caddy
-
-    volumes:
-      - ../../src/server:/server/src
-      - ../../node_modules:/server/node_modules
 
 networks:
   backend:
