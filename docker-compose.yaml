@@ -63,7 +63,7 @@ services:
 
     volumes:
       - ./src/server:/server/src
-      - ./node_modules:/server/node_modules
+      - ./buildServer.js:/server/buildServer.js
 
 networks:
   backend:
