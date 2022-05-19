@@ -32,6 +32,7 @@ services:
       POSTGRES_DB: $POSTGRES_DB
     volumes:
       - ./postgres/data/:/var/lib/postgresql/data/
+      - ../../src/server/database/sql/init.sql:/docker-entrypoint-initdb.d/initDB.sql
     networks:
       - backend
       - default

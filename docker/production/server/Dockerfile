@@ -9,8 +9,9 @@ USER node
 
 COPY ./package.json ./
 COPY ./yarn.lock ./
+COPY ./buildServer.js ./
 
-COPY ./src/server ./
+COPY ./src/server ./src/
 
 RUN yarn
 
