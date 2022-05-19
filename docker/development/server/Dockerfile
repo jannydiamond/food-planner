@@ -17,6 +17,7 @@ RUN yarn
 
 COPY ./tsconfig.json ./
 COPY ./tsconfig.server.json ./
+COPY ./buildServer.js ./
 
 EXPOSE 8080
 
