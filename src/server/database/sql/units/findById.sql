@@ -1,4 +1,4 @@
 /*
     Finds unit by id
 */
-SELECT * FROM units WHERE id = ${id}
+SELECT * FROM unit WHERE id = ${id}

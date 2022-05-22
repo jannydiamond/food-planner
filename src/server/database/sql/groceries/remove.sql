@@ -1,4 +1,4 @@
 /*
-    Deletes an ingredient.
+    Deletes a grocery.
 */
-DELETE FROM ingredients WHERE id = ${id}
+DELETE FROM grocery WHERE id = ${id}

@@ -1,6 +1,6 @@
 /*
     Adds a new unit.
 */
-INSERT INTO units(name)
-VALUES(${name})
+INSERT INTO unit(unit_name)
+VALUES(${unitName})
 RETURNING *

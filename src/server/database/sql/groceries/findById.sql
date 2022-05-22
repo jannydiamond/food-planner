@@ -1,4 +1,4 @@
 /*
-    Finds ingredient by id
+    Finds grocery by id
 */
-SELECT * FROM ingredients WHERE id = ${id}
+SELECT * FROM grocery WHERE id = ${id}
