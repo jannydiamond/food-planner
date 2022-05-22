@@ -1,11 +1,11 @@
 import express, { Request, Response } from 'express'
 import { db } from '../database'
 
-const ingredientsRouter = express.Router()
+const groceriesRouter = express.Router()
 
-ingredientsRouter.get('/', async (_req: Request, res: Response) => {
+groceriesRouter.get('/', async (_req: Request, res: Response) => {
   try {
-    const data = await db.ingredients.selectAll()
+    const data = await db.groceries.selectAll()
     res.json({
       success: true,
       data,
@@ -18,11 +18,11 @@ ingredientsRouter.get('/', async (_req: Request, res: Response) => {
   }
 })
 
-ingredientsRouter.get('/:id', async (req: Request, res: Response) => {
+groceriesRouter.get('/:id', async (req: Request, res: Response) => {
   const { id } = req.params
 
   try {
-    const data = await db.ingredients.findById(parseInt(id))
+    const data = await db.groceries.findById(parseInt(id))
     res.json({
       success: true,
       data,
@@ -35,4 +35,4 @@ ingredientsRouter.get('/:id', async (req: Request, res: Response) => {
   }
 })
 
-export default ingredientsRouter
+export default groceriesRouter
