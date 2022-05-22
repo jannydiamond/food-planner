@@ -1,6 +1,6 @@
 /*
-    Adds a new ingredient.
+    Adds a new grocery.
 */
-INSERT INTO ingredients(name, inventory_amount, inventory_unit_id)
-VALUES(${name}, ${inventoryAmount}, ${inventoryUnitId})
+INSERT INTO grocery(grocery_name, created_by, updated_at)
+VALUES(${groceryName}, ${createdBy}, ${updatedAt})
 RETURNING *

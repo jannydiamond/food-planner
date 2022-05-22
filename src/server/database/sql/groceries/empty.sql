@@ -1,4 +1,4 @@
 /*
-    Quickly deletes all records from table ingredients.
+    Quickly deletes all records from table grocery.
 */
-TRUNCATE TABLE ingredients
+TRUNCATE TABLE grocery CASCADE

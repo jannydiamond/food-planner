@@ -1,4 +1,4 @@
 /*
-    Gets all ingredients
+    Gets all grocery
 */
-SELECT * FROM ingredients
+SELECT * FROM grocery
