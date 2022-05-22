@@ -18,18 +18,16 @@ const sql = (file: string): QueryFile => {
   return queryFile
 }
 
-export const ingredients = {
-  empty: sql('ingredients/empty.sql'),
-  drop: sql('ingredients/drop.sql'),
-  add: sql('ingredients/add.sql'),
-  remove: sql('ingredients/remove.sql'),
-  selectAll: sql('ingredients/selectAll.sql'),
-  findById: sql('ingredients/findById.sql'),
+export const groceries = {
+  empty: sql('groceries/empty.sql'),
+  add: sql('groceries/add.sql'),
+  remove: sql('groceries/remove.sql'),
+  selectAll: sql('groceries/selectAll.sql'),
+  findById: sql('groceries/findById.sql'),
 }
 
 export const units = {
   empty: sql('units/empty.sql'),
-  drop: sql('units/drop.sql'),
   add: sql('units/add.sql'),
   remove: sql('units/remove.sql'),
   selectAll: sql('units/selectAll.sql'),
