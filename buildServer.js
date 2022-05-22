@@ -4,7 +4,7 @@ require('esbuild').build({
     outfile: 'build/index.js',
     tsconfig: 'tsconfig.server.json',
     platform: 'node',
-    external: ['pg-native'],
+    external: ['pg-native', 'bcrypt'],
     plugins: [
       require('esbuild-plugin-copy').copy({
         assets: {

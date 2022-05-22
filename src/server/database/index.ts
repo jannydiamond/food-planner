@@ -3,7 +3,8 @@ import promise from 'bluebird'
 import pgPromise, { IInitOptions, IDatabase, IMain } from 'pg-promise'
 import {
   IExtensions,
-  IngredientsRepository,
+  FpUsersRepository,
+  GroceriesRepository,
   UnitsRepository,
 } from './repositories'
 import { Diagnostics } from './diagnostics'
@@ -25,7 +26,8 @@ const initOptions: IInitOptions<IExtensions> = {
 
     // Do not use 'require()' here, because this event occurs for every task and transaction being executed,
     // which should be as fast as possible.
-    obj.ingredients = new IngredientsRepository(obj, pgp)
+    obj.fpUsers = new FpUsersRepository(obj, pgp)
+    obj.groceries = new GroceriesRepository(obj, pgp)
     obj.units = new UnitsRepository(obj, pgp)
   },
 }

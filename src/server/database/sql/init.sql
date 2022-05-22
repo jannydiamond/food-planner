@@ -3,8 +3,8 @@ CREATE extension IF NOT EXISTS pgcrypto;
 CREATE TABLE IF NOT EXISTS fp_user
 (
     id uuid PRIMARY KEY NOT NULL DEFAULT gen_random_uuid(),
-    user_name text NOT NULL UNIQUE,
-    user_password text NOT NULL,
+    username text NOT NULL UNIQUE,
+    password text NOT NULL,
     created_at date DEFAULT NOW(),
     updated_at date NOT NULL DEFAULT NOW()
 );

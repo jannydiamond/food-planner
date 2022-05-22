@@ -18,6 +18,15 @@ const sql = (file: string): QueryFile => {
   return queryFile
 }
 
+export const fpUsers = {
+  empty: sql('fpUsers/empty.sql'),
+  add: sql('fpUsers/add.sql'),
+  remove: sql('fpUsers/remove.sql'),
+  selectAll: sql('fpUsers/selectAll.sql'),
+  findById: sql('fpUsers/findById.sql'),
+  findByName: sql('fpUsers/findByName.sql'),
+}
+
 export const groceries = {
   empty: sql('groceries/empty.sql'),
   add: sql('groceries/add.sql'),
