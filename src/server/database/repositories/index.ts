@@ -1,10 +1,10 @@
-import { IngredientsRepository } from './ingredients'
+import { GroceriesRepository } from './groceries'
 import { UnitsRepository } from './units'
 
 // Database Interface Extensions:
 interface IExtensions {
-  ingredients: IngredientsRepository
+  groceries: GroceriesRepository
   units: UnitsRepository
 }
 
-export { IExtensions, IngredientsRepository, UnitsRepository }
+export { IExtensions, GroceriesRepository, UnitsRepository }

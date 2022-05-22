@@ -20,11 +20,6 @@ export class UnitsRepository {
       */
   }
 
-  // Drops the table
-  async drop(): Promise<null> {
-    return this.db.none(sql.drop)
-  }
-
   // Removes all records from the table
   async empty(): Promise<null> {
     return this.db.none(sql.empty)
