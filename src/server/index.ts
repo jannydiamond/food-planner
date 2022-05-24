@@ -1,4 +1,5 @@
 import express, { Express } from 'express'
+import helmet from 'helmet'
 import authRouter from './routes/auth'
 
 import groceriesRouter from './routes/groceries'
@@ -13,6 +14,7 @@ const port = process.env.PORT ? parseInt(process.env.PORT) : 8080
 const apiVersion = 'v1'
 const basePath = `/api/${apiVersion}`
 
+app.use(helmet())
 // parse requests of content-type - application/json
 app.use(express.json())
 // parse requests of content-type - application/x-www-form-urlencoded
