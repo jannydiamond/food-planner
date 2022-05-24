@@ -24,6 +24,8 @@
   "include": [
     "src/index.tsx",
     "src/client",
-    "src/model"
+    "src/model",
+    "src/theme",
+    "src/styled.d.ts",
   ]
 }
