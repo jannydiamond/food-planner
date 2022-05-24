@@ -1,16 +1,17 @@
 import { NextFunction, Request, Response } from 'express'
 import jwt from 'jsonwebtoken'
+import { FpUser } from './database/models'
 
 export const TOKEN_SECRET = process.env.TOKEN_SECRET ?? 'foodplanner'
 
-export const generateAccessToken = (username: string) => {
-  return jwt.sign({ user: username }, TOKEN_SECRET, {
-    expiresIn: '7 days',
+export const generateAccessToken = (user: Pick<FpUser, 'id' | 'username'>) => {
+  return jwt.sign({ user: user }, TOKEN_SECRET, {
+    expiresIn: '1h',
   })
 }
 
 export const verifyToken = (
-  req: Request & { user: any },
+  req: Request & { user: Pick<FpUser, 'id' | 'username'> },
   res: Response,
   next: NextFunction
 ) => {
@@ -23,17 +24,21 @@ export const verifyToken = (
     return
   }
 
-  jwt.verify(token, TOKEN_SECRET as string, (err: any, user: any) => {
-    console.log(err)
+  jwt.verify(
+    token,
+    TOKEN_SECRET as string,
+    (err: any, user: Pick<FpUser, 'id' | 'username'>) => {
+      console.log(err)
 
-    if (err) {
-      res.statusCode = 403
-      res.send('Forbidden!')
-      return
+      if (err) {
+        res.statusCode = 403
+        res.send('Forbidden!')
+        return
+      }
+
+      req.user = user
+
+      next()
     }
-
-    req.user = user
-
-    next()
-  })
+  )
 }
