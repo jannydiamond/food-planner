@@ -88,7 +88,10 @@ authRouter.post(
       return next()
     }
 
-    const token = generateAccessToken(username)
+    const token = generateAccessToken({
+      id: existingUser.id,
+      username: existingUser.username,
+    })
 
     res.statusCode = 200
     res.json({
