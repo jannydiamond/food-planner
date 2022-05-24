@@ -1,6 +1,6 @@
 import { IDatabase, IMain } from 'pg-promise'
 import { IResult } from 'pg-promise/typescript/pg-subset'
-import { Unit } from '../models'
+import { Unit } from '../../../model/types'
 import { units as sql } from '../sql'
 
 export class UnitsRepository {

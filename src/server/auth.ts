@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express'
 import jwt from 'jsonwebtoken'
-import { FpUser } from './database/models'
+import { FpUser } from '../model/types'
 
 export const TOKEN_SECRET = process.env.TOKEN_SECRET ?? 'foodplanner'
 
