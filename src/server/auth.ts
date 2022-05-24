@@ -10,7 +10,7 @@ export const generateAccessToken = (user: Pick<FpUser, 'id' | 'username'>) => {
   })
 }
 
-export const verifyToken = (
+export const verifyToken: any = (
   req: Request & { user: Pick<FpUser, 'id' | 'username'> },
   res: Response,
   next: NextFunction
@@ -24,21 +24,17 @@ export const verifyToken = (
     return
   }
 
-  jwt.verify(
-    token,
-    TOKEN_SECRET as string,
-    (err: any, user: Pick<FpUser, 'id' | 'username'>) => {
-      console.log(err)
+  jwt.verify(token as string, TOKEN_SECRET as string, (err: any, user: any) => {
+    console.log(err)
 
-      if (err) {
-        res.statusCode = 403
-        res.send('Forbidden!')
-        return
-      }
-
-      req.user = user
-
-      next()
+    if (err) {
+      res.statusCode = 403
+      res.send('Forbidden!')
+      return
     }
-  )
+
+    req.user = user
+
+    next()
+  })
 }

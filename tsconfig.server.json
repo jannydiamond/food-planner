@@ -3,11 +3,6 @@
   "compilerOptions": {
     "target": "ESNext",
     "module": "CommonJS",
-    "strict": true,
-    "resolveJsonModule": true,
-    "allowSyntheticDefaultImports": true,
-    "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true,
     "outDir": "./build/server",
   },
   "include": [
