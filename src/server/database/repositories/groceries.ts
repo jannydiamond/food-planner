@@ -1,6 +1,6 @@
 import { IDatabase, IMain } from 'pg-promise'
 import { IResult } from 'pg-promise/typescript/pg-subset'
-import { Grocery } from '../models'
+import { Grocery } from '../../../model/types'
 import { groceries as sql } from '../sql'
 
 export class GroceriesRepository {

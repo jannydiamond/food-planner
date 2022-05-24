@@ -1,6 +1,6 @@
 import { IDatabase, IMain } from 'pg-promise'
 import { IResult } from 'pg-promise/typescript/pg-subset'
-import { FpUser } from '../models'
+import { FpUser } from '../../../model/types'
 import { fpUsers as sql } from '../sql'
 
 export class FpUsersRepository {
