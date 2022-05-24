@@ -24,7 +24,7 @@ app.use(
   })
 )
 
-app.use(`${basePath}/`, authRouter)
+app.use(`${basePath}`, authRouter)
 app.use(`${basePath}/users`, usersRouter)
 app.use(`${basePath}/groceries`, groceriesRouter)
 app.use(`${basePath}/units`, unitsRouter)
