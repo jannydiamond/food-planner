@@ -1,5 +1,6 @@
 import express, { Express } from 'express'
 import helmet from 'helmet'
+import cors from 'cors'
 import authRouter from './routes/auth'
 
 import groceriesRouter from './routes/groceries'
@@ -15,6 +16,7 @@ const apiVersion = 'v1'
 const basePath = `/api/${apiVersion}`
 
 app.use(helmet())
+app.use(cors())
 // parse requests of content-type - application/json
 app.use(express.json())
 // parse requests of content-type - application/x-www-form-urlencoded
