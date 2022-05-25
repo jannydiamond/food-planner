@@ -1,0 +1,13 @@
+:80
+
+# TODO
+# * gzip
+# * basic auth
+
+root * /srv
+
+encode gzip
+
+try_files {path} /index.html
+
+file_server
