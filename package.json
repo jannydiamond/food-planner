@@ -11,7 +11,7 @@
     "build:server": "node ./buildServer.js",
     "run:server": "node build/index.js",
     "start:server": "yarn build:server && yarn run:server",
-    "generate:db:types": "schemats postgres postgres://foodplanner:foodplanner@localhost/foodplanner?sslmode=disable -c -e -o ./src/model/types.ts",
+    "generate:db:types": "schemats postgres postgres://foodplanner:foodplanner@localhost/foodplanner?sslmode=disable -C -e -o ./src/model/types.ts",
     "check:types:client": "tsc --noEmit",
     "check:types:server": "tsc --noEmit -p ./tsconfig.server.json",
     "check:types": "yarn check:types:client && yarn check:types:server",
@@ -19,6 +19,7 @@
     "lint:fix": "eslint --fix ."
   },
   "dependencies": {
+    "@reduxjs/toolkit": "^1.8.1",
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^13.0.0",
     "@testing-library/user-event": "^13.2.1",
@@ -35,6 +36,7 @@
     "babel-plugin-macros": "^3.1.0",
     "bcrypt": "^5.0.1",
     "bluebird": "^3.7.2",
+    "cors": "^2.8.5",
     "dotenv": "^16.0.1",
     "express": "^4.18.1",
     "helmet": "^5.1.0",
@@ -43,6 +45,7 @@
     "pg-promise": "^10.11.1",
     "react": "^18.1.0",
     "react-dom": "^18.1.0",
+    "react-redux": "^8.0.2",
     "react-scripts": "5.0.1",
     "styled-components": "^5.3.5",
     "typescript": "^4.6.4",

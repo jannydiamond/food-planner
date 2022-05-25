@@ -45,21 +45,6 @@ CREATE TABLE IF NOT EXISTS unit
     updated_at date NOT NULL DEFAULT NOW()
 );
 
-INSERT INTO unit(unit_name) VALUES
-('STK'),
-('MG'),
-('G'),
-('KG'),
-('ML'),
-('L'),
-('DOSE'),
-('TL'),
-('EL'),
-('PACKUNG'),
-('GLAS'),
-('FLASCHE'),
-('PRIESE');
-
 CREATE TABLE IF NOT EXISTS grocery
 (
     id uuid PRIMARY KEY NOT NULL DEFAULT gen_random_uuid(),
