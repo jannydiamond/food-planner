@@ -1,10 +1,8 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import { Unit } from 'model/types'
 
-const serverHostname = process.env.HOST ? process.env.HOST : '0.0.0.0'
-const serverPort = process.env.PORT ? parseInt(process.env.PORT) : 8080
-
-export const SERVER_BASE_URL = `http://${serverHostname}:${serverPort}/api/v1/`
+export const BASE_URL = `${window.location.origin.toString()}`
+export const SERVER_BASE_URL = `${BASE_URL}/api/v1`
 
 type AllUnitsResponse = {
   success: boolean

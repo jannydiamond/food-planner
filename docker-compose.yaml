@@ -64,6 +64,29 @@ services:
     volumes:
       - ./src/server:/server/src
       - ./buildServer.js:/server/buildServer.js
+  
+  client:
+    image: foodplanner-client
+    container_name: foodplanner_client
+    build:
+      context: ./
+      dockerfile: docker/development/client/Dockerfile
+
+    environment:
+      NODE_ENV: development
+
+    security_opt:
+      - no-new-privileges
+
+    cap_drop:
+      - NET_ADMIN
+      - SYS_ADMIN
+
+    networks:
+      - caddy
+
+    volumes:
+      - ./:/app
 
 networks:
   backend:

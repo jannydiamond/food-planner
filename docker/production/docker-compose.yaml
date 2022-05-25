@@ -66,6 +66,29 @@ services:
       - backend
       - caddy
 
+  client:
+    image: foodplanner-server
+    container_name: foodplanner_server
+    restart: unless-stopped
+
+    security_opt:
+      - no-new-privileges
+
+    cap_drop:
+      - NET_ADMIN
+      - SYS_ADMIN
+
+    environment:
+      NODE_ENV: production
+
+    networks:
+      - caddy
+
+    volumes:
+      - ./client/Caddyfile:/etc/caddy/Caddyfile
+      - ./client/caddy_data:/data
+      - ./client/caddy_config:/config
+
 networks:
   backend:
     internal: true
