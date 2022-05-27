@@ -6,7 +6,7 @@
 // which may be a little better performing, but lacks all the nice formatting
 // provided by pg-monitor.
 
-import fs = require('fs')
+import fs from 'fs'
 import * as pgMonitor from 'pg-monitor'
 import { IInitOptions } from 'pg-promise'
 
