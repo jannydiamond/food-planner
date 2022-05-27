@@ -1,18 +1,35 @@
-import { configureStore } from '@reduxjs/toolkit'
+import { combineReducers, configureStore } from '@reduxjs/toolkit'
 import { setupListeners } from '@reduxjs/toolkit/dist/query'
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux'
 import { foodplannerApi } from './api'
+import { authorizationResetMiddleware } from './middlewares/authorizationReset'
+import AuthenticationSlice, {
+  selectors as authenticationSelectors,
+} from './slices/authentication'
 
 export const store = configureStore({
-  reducer: {
+  reducer: combineReducers({
+    authentication: AuthenticationSlice.reducer,
     // Add the generated reducer as a specific top-level slice
     [foodplannerApi.reducerPath]: foodplannerApi.reducer,
-  },
+  }),
+  devTools: process.env.NODE_ENV !== 'production',
   // Adding the api middleware enables caching, invalidation, polling,
   // and other useful features of `rtk-query`.
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(foodplannerApi.middleware),
+    getDefaultMiddleware().concat(
+      foodplannerApi.middleware,
+      authorizationResetMiddleware
+    ),
 })
+
+export const actions = {
+  authentication: AuthenticationSlice.actions,
+}
+
+export const selectors = {
+  authentication: authenticationSelectors,
+}
 
 // optional, but required for refetchOnFocus/refetchOnReconnect behaviors
 // see `setupListeners` docs - takes an optional callback as the 2nd arg for customization

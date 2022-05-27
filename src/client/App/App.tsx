@@ -1,5 +1,7 @@
+import Routes from 'client/Routes'
+
 const App = () => {
-  return <div>Foodplanner</div>
+  return <Routes />
 }
 
 export default App
