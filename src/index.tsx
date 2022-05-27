@@ -5,18 +5,30 @@ import GlobalStyles from 'client/GlobalStyles'
 import defaultTheme from 'theme/defaultTheme'
 import { ThemeProvider } from 'styled-components/macro'
 import { Provider } from 'react-redux'
-import { store } from 'client/Redux/store'
+import { actions, store } from 'client/Redux/store'
+import { BrowserRouter } from 'react-router-dom'
+import { getAuthToken } from 'client/utils/localStorage'
 //import reportWebVitals from './client/reportWebVitals'
 
 const root = createRoot(document.getElementById('root') as HTMLElement)
 
+// If the user already has a auth token, we set it to the store,
+// so they will be logged in automatically
+const token = getAuthToken()
+
+if (token) {
+  store.dispatch(actions.authentication.setToken(token))
+}
+
 root.render(
   <React.StrictMode>
     <Provider store={store}>
-      <ThemeProvider theme={defaultTheme}>
-        <GlobalStyles />
-        <App />
-      </ThemeProvider>
+      <BrowserRouter>
+        <ThemeProvider theme={defaultTheme}>
+          <GlobalStyles />
+          <App />
+        </ThemeProvider>
+      </BrowserRouter>
     </Provider>
   </React.StrictMode>
 )
