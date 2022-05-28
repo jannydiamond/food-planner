@@ -35,10 +35,13 @@ const initOptions: IInitOptions<IExtensions> = {
 // Loading and initializing the library:
 const pgp: IMain = pgPromise(initOptions)
 
+const dbPort = process.env.NODE_ENV === 'test' ? 5442 : 5432
+const dbHost = process.env.NODE_ENV === 'test' ? 'db_test' : 'db'
+
 // Preparing the connection details:
 const connectionDetails = {
-  host: 'db',
-  port: 5432,
+  host: dbHost,
+  port: dbPort,
   database: `${process.env.POSTGRES_DB}`,
   user: `${process.env.POSTGRES_USER}`,
   password: `${process.env.POSTGRES_PASSWORD}`,

@@ -7,7 +7,7 @@ import groceriesRouter from './routes/groceries'
 import unitsRouter from './routes/units'
 import usersRouter from './routes/users'
 
-const app: Express = express()
+export const app: Express = express()
 
 const hostname = process.env.HOST ? process.env.HOST : '0.0.0.0'
 const port = process.env.PORT ? parseInt(process.env.PORT) : 8080

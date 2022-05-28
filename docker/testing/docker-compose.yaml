@@ -1,0 +1,56 @@
+version: '3.9'
+
+services:
+  db_test:
+    image: postgres:14.2-alpine
+    container_name: foodplanner_db_test
+    ports:
+      - 5442:5442
+    environment:
+      POSTGRES_PASSWORD: foodplanner
+      POSTGRES_USER: foodplanner
+      POSTGRES_DB: foodplanner
+    volumes:
+      - ./postgres/data/:/var/lib/postgresql/data/
+      - ../../src/server/database/sql/init.sql:/docker-entrypoint-initdb.d/initDB.sql
+
+    networks:
+      - backend_test
+    command: -p 5442 -h db_test
+
+  server_test:
+    image: foodplanner-server_test
+    container_name: foodplanner_server_test
+    ports:
+      - 8081:8081
+    build:
+      context: ../../
+      dockerfile: docker/testing/server/Dockerfile
+
+    environment:
+      NODE_ENV: test
+      POSTGRES_PASSWORD: foodplanner
+      POSTGRES_USER: foodplanner
+      POSTGRES_DB: foodplanner
+      PORT: 8081
+
+    security_opt:
+      - no-new-privileges
+      
+    cap_drop:
+      - NET_ADMIN
+      - SYS_ADMIN
+
+    depends_on:
+      - db_test
+
+    networks:
+      - backend_test
+
+    volumes:
+      - ../../src/server:/server/src
+      - ../../buildServer.js:/server/buildServer.js
+
+networks:
+  backend_test:
+    internal: true

@@ -24,6 +24,7 @@ yarn-error.log*
 
 # project
 .env
+docker/testing/postgres
 docker/development/postgres
 docker/production/postgres
 db-errors.log*
