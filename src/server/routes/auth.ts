@@ -5,6 +5,27 @@ import { generateAccessToken } from '../auth'
 
 const authRouter = express.Router()
 
+/**
+ * @swagger
+ * /register:
+ *   post:
+ *     description: Register new user
+ *     parameters:
+ *     - username: String
+ *       description: Username
+ *       in: formData
+ *       required: true
+ *       type: String
+ *     - password: String
+ *       description: Password
+ *       in: formData
+ *       required: true
+ *       type: String
+ *     responses:
+ *       201:
+ *         description: Created
+ *
+ */
 authRouter.post(
   '/register',
   async (req: Request, res: Response, next: NextFunction) => {
@@ -49,6 +70,27 @@ authRouter.post(
   }
 )
 
+/**
+ * @swagger
+ * /login:
+ *   post:
+ *     description: Login a user
+ *     parameters:
+ *     - username: String
+ *       description: Username
+ *       in: formData
+ *       required: true
+ *       type: String
+ *     - password: String
+ *       description: Password
+ *       in: formData
+ *       required: true
+ *       type: String
+ *     responses:
+ *       200:
+ *         description: Success
+ *
+ */
 authRouter.post(
   '/login',
   async (req: Request, res: Response, next: NextFunction) => {

@@ -4,6 +4,8 @@
     "target": "ESNext",
     "module": "CommonJS",
     "outDir": "./build/server",
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true
   },
   "include": [
     "src/server",
