@@ -27,6 +27,17 @@ export const fpUsers = {
   findByName: sql('fpUsers/findByName.sql'),
 }
 
+export const households = {
+  add: sql('households/add.sql'),
+  addUserToHousehold: sql('households/addUserToHousehold.sql'),
+  remove: sql('households/remove.sql'),
+  removeUserFromHousehold: sql('households/removeUserFromHousehold.sql'),
+  selectAllCreatedByUsername: sql('households/selectAllCreatedByUsername.sql'),
+  selectAllHouseholdsOfUser: sql('households/selectAllHouseholdsOfUser.sql'),
+  selectAllUsersOfHousehold: sql('households/selectAllUsersOfHousehold.sql'),
+  findById: sql('households/findById.sql'),
+}
+
 export const groceries = {
   empty: sql('groceries/empty.sql'),
   add: sql('groceries/add.sql'),

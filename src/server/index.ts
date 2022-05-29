@@ -6,6 +6,7 @@ import authRouter from './routes/auth'
 import groceriesRouter from './routes/groceries'
 import unitsRouter from './routes/units'
 import usersRouter from './routes/users'
+import householdsRouter from './routes/households'
 
 const app: Express = express()
 
@@ -28,6 +29,7 @@ app.use(
 
 app.use(`${basePath}`, authRouter)
 app.use(`${basePath}/users`, usersRouter)
+app.use(`${basePath}/households`, householdsRouter)
 app.use(`${basePath}/groceries`, groceriesRouter)
 app.use(`${basePath}/units`, unitsRouter)
 

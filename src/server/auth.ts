@@ -6,7 +6,7 @@ export const TOKEN_SECRET = process.env.TOKEN_SECRET ?? 'foodplanner'
 
 export const generateAccessToken = (user: Pick<FpUser, 'id' | 'username'>) => {
   return jwt.sign({ user: user }, TOKEN_SECRET, {
-    expiresIn: '1h',
+    expiresIn: '7 days',
   })
 }
 
