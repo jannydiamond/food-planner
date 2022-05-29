@@ -39,7 +39,7 @@ export class FpUsersRepository {
 
   // Tries to find a fpUser by id
   async findById(id: number): Promise<FpUser | null> {
-    return this.db.oneOrNone(sql.findById, id)
+    return this.db.oneOrNone(sql.findById, { id })
   }
 
   // Tries to find a fpUser by name

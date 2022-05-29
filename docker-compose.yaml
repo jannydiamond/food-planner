@@ -30,6 +30,8 @@ services:
       POSTGRES_DB: foodplanner
     volumes:
       - ./docker/development/postgres/data/:/var/lib/postgresql/data/
+      - ./src/server/database/sql/init.sql:/docker-entrypoint-initdb.d/initDB.sql
+
     networks:
       - backend
       - default # so we can access/inspect the db from the host system

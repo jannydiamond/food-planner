@@ -6,6 +6,7 @@ import {
   FpUsersRepository,
   GroceriesRepository,
   UnitsRepository,
+  HouseholdsRepository,
 } from './repositories'
 import { Diagnostics } from './diagnostics'
 
@@ -27,6 +28,7 @@ const initOptions: IInitOptions<IExtensions> = {
     // Do not use 'require()' here, because this event occurs for every task and transaction being executed,
     // which should be as fast as possible.
     obj.fpUsers = new FpUsersRepository(obj, pgp)
+    obj.households = new HouseholdsRepository(obj, pgp)
     obj.groceries = new GroceriesRepository(obj, pgp)
     obj.units = new UnitsRepository(obj, pgp)
   },

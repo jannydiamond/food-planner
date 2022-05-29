@@ -2,158 +2,156 @@ CREATE extension IF NOT EXISTS pgcrypto;
 
 CREATE TABLE IF NOT EXISTS fp_user
 (
-    id uuid PRIMARY KEY NOT NULL DEFAULT gen_random_uuid(),
+    id uuid NOT NULL PRIMARY KEY DEFAULT gen_random_uuid(),
     username text NOT NULL UNIQUE,
     password text NOT NULL,
-    created_at date DEFAULT NOW(),
-    updated_at date NOT NULL DEFAULT NOW()
+    created_at timestamp DEFAULT NOW(),
+    updated_at timestamp NOT NULL DEFAULT NOW()
 );
 
 CREATE TABLE IF NOT EXISTS household
 (
-    id uuid PRIMARY KEY NOT NULL DEFAULT gen_random_uuid(),
+    id uuid NOT NULL PRIMARY KEY DEFAULT gen_random_uuid(),
     household_name text NOT NULL,
-    created_by uuid references fp_user(id) NOT NULL,
-    created_at date DEFAULT NOW(),
-    updated_at date NOT NULL DEFAULT NOW()
+    created_by text references fp_user(username),
+    created_at timestamp DEFAULT NOW(),
+    updated_at timestamp NOT NULL DEFAULT NOW()
 );
 
 CREATE TABLE IF NOT EXISTS household_has_user
 (
-    user_id uuid references fp_user(id) NOT NULL,
-    household_id uuid references household(id) NOT NULL,
-    added_at date DEFAULT NOW(),
-    updated_at date NOT NULL DEFAULT NOW()
+    user_id uuid NOT NULL references fp_user(id) ON DELETE CASCADE,
+    household_id uuid NOT NULL references household(id) ON DELETE CASCADE,
+    added_at timestamp DEFAULT NOW(),
+    updated_at timestamp NOT NULL DEFAULT NOW()
 );
 
 CREATE TABLE IF NOT EXISTS inventory
 (
-    id uuid PRIMARY KEY NOT NULL DEFAULT gen_random_uuid(),
+    id uuid NOT NULL PRIMARY KEY DEFAULT gen_random_uuid(),
     inventory_name text NOT NULL,
-    created_by uuid references fp_user(id) NOT NULL,
-    created_at date DEFAULT NOW(),
-    updated_at date NOT NULL DEFAULT NOW(),
-    household_id uuid references household(id) NOT NULL
+    created_by text references fp_user(username),
+    created_at timestamp DEFAULT NOW(),
+    updated_at timestamp NOT NULL DEFAULT NOW(),
+    household_id uuid NOT NULL references household(id) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS unit
 (
-    id serial PRIMARY KEY NOT NULL,
-    unit_name text NOT NULL,
-    created_by uuid references fp_user(id),
-    created_at date DEFAULT NOW(),
-    updated_at date NOT NULL DEFAULT NOW()
+    id serial NOT NULL PRIMARY KEY,
+    unit_name text NOT NULL UNIQUE,
+    created_by text references fp_user(username),
+    created_at timestamp DEFAULT NOW(),
+    updated_at timestamp NOT NULL DEFAULT NOW()
 );
 
 CREATE TABLE IF NOT EXISTS grocery
 (
-    id uuid PRIMARY KEY NOT NULL DEFAULT gen_random_uuid(),
-    grocery_name text NOT NULL,
+    id uuid NOT NULL PRIMARY KEY DEFAULT gen_random_uuid(),
+    grocery_name text NOT NULL UNIQUE,
     base_amount int,
-    base_unit_id int references unit(id),
+    base_unit text references unit(unit_name),
     alt_amount int,
-    alt_unit_id int references unit(id),
-    created_by uuid references fp_user(id) NOT NULL,
-    created_at date DEFAULT NOW(),
-    updated_at date NOT NULL DEFAULT NOW()
+    alt_unit text references unit(unit_name),
+    created_by text references fp_user(username),
+    created_at timestamp DEFAULT NOW(),
+    updated_at timestamp NOT NULL DEFAULT NOW()
 );
 
 CREATE TABLE IF NOT EXISTS inventory_has_grocery
 (
-    inventory_id uuid references inventory(id) NOT NULL,
-    grocery_id uuid references grocery(id) NOT NULL,
+    inventory_id uuid NOT NULL references inventory(id) ON DELETE CASCADE,
+    grocery_id uuid NOT NULL references grocery(id) ON DELETE CASCADE,
     amount int,
-    unit_id int references unit(id),
+    unit text references unit(unit_name),
     bestBefore date,
-    added_by uuid references fp_user(id) NOT NULL,
-    added_at date DEFAULT NOW(),
-    updated_at date NOT NULL DEFAULT NOW()
+    added_by text references fp_user(username),
+    added_at timestamp DEFAULT NOW(),
+    updated_at timestamp NOT NULL DEFAULT NOW()
 );
 
 CREATE TABLE IF NOT EXISTS shopping_list
 (
-    id uuid PRIMARY KEY NOT NULL DEFAULT gen_random_uuid(),
+    id uuid NOT NULL PRIMARY KEY DEFAULT gen_random_uuid(),
     shopping_list_name text NOT NULL,
-    created_by uuid references fp_user(id) NOT NULL,
-    created_at date DEFAULT NOW(),
-    updated_at date NOT NULL DEFAULT NOW(),
-    household_id uuid references household(id) NOT NULL
+    created_by text references fp_user(username),
+    created_at timestamp DEFAULT NOW(),
+    updated_at timestamp NOT NULL DEFAULT NOW(),
+    household_id uuid NOT NULL references household(id) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS shopping_list_has_grocery
 (
-    shopping_list_id uuid references shopping_list(id) NOT NULL,
-    grocery_id uuid references grocery(id) NOT NULL,
+    shopping_list_id uuid NOT NULL references shopping_list(id) ON DELETE CASCADE,
+    grocery_id uuid NOT NULL references grocery(id) ON DELETE CASCADE,
     amount int,
-    unit_id int references unit(id),
-    added_by uuid references fp_user(id) NOT NULL,
-    added_at date DEFAULT NOW(),
-    updated_at date NOT NULL DEFAULT NOW()
+    unit text references unit(unit_name),
+    added_by text references fp_user(username),
+    added_at timestamp DEFAULT NOW(),
+    updated_at timestamp NOT NULL DEFAULT NOW()
 );
 
 CREATE TABLE IF NOT EXISTS recipe
 (
-    id uuid PRIMARY KEY NOT NULL DEFAULT gen_random_uuid(),
+    id uuid NOT NULL PRIMARY KEY DEFAULT gen_random_uuid(),
     recipe_name text NOT NULL,
     steps jsonb,
-    created_by uuid references fp_user(id) NOT NULL,
-    created_at date DEFAULT NOW(),
-    updated_at date NOT NULL DEFAULT NOW(),
-    household_id uuid references household(id) NOT NULL
+    created_by text references fp_user(username),
+    created_at timestamp DEFAULT NOW(),
+    updated_at timestamp NOT NULL DEFAULT NOW()
 );
 
 CREATE TABLE IF NOT EXISTS recipe_has_grocery
 (
-    grocery_id uuid references grocery(id) NOT NULL,
-    recipe_id uuid references recipe(id) NOT NULL,
+    grocery_id uuid NOT NULL references grocery(id) ON DELETE CASCADE,
+    recipe_id uuid NOT NULL references recipe(id) ON DELETE CASCADE,
     amount int DEFAULT 0,
-    unit_id int references unit(id),
-    created_at date DEFAULT NOW(),
-    updated_at date NOT NULL DEFAULT NOW()
+    unit text references unit(unit_name),
+    created_at timestamp DEFAULT NOW(),
+    updated_at timestamp NOT NULL DEFAULT NOW()
 );
 
 CREATE TABLE IF NOT EXISTS tag
 (
-    id serial PRIMARY KEY NOT NULL,
+    id serial NOT NULL PRIMARY KEY,
     tag_name text NOT NULL,
-    created_by uuid references fp_user(id) NOT NULL,
-    created_at date DEFAULT NOW(),
-    updated_at date NOT NULL DEFAULT NOW(),
-    household_id uuid references household(id) NOT NULL
+    created_by text references fp_user(username),
+    created_at timestamp DEFAULT NOW(),
+    updated_at timestamp NOT NULL DEFAULT NOW()
 );
 
 CREATE TABLE IF NOT EXISTS grocery_tag
 (
-    grocery_id uuid references grocery(id) NOT NULL,
-    tag_id int references tag(id) NOT NULL,
-    added_by uuid references fp_user(id) NOT NULL,
-    added_at date DEFAULT NOW(),
-    updated_at date NOT NULL DEFAULT NOW()
+    grocery_id uuid NOT NULL references grocery(id) ON DELETE CASCADE,
+    tag_id int NOT NULL references tag(id) ON DELETE CASCADE,
+    added_by text references fp_user(username),
+    added_at timestamp DEFAULT NOW(),
+    updated_at timestamp NOT NULL DEFAULT NOW()
 );
 
 CREATE TABLE IF NOT EXISTS inventory_tag
 (
-    inventory_id uuid references inventory(id) NOT NULL,
-    tag_id int references tag(id) NOT NULL,
-    added_by uuid references fp_user(id) NOT NULL,
-    added_at date DEFAULT NOW(),
-    updated_at date NOT NULL DEFAULT NOW()
+    inventory_id uuid NOT NULL references inventory(id) ON DELETE CASCADE,
+    tag_id int NOT NULL references tag(id) ON DELETE CASCADE,
+    added_by text references fp_user(username),
+    added_at timestamp DEFAULT NOW(),
+    updated_at timestamp NOT NULL DEFAULT NOW()
 );
 
 CREATE TABLE IF NOT EXISTS shopping_list_tag
 (
-    shopping_list_id uuid references shopping_list(id) NOT NULL,
-    tag_id int references tag(id) NOT NULL,
-    added_by uuid references fp_user(id) NOT NULL,
-    added_at date DEFAULT NOW(),
-    updated_at date NOT NULL DEFAULT NOW()
+    shopping_list_id uuid NOT NULL references shopping_list(id) ON DELETE CASCADE,
+    tag_id int NOT NULL references tag(id) ON DELETE CASCADE,
+    added_by text references fp_user(username),
+    added_at timestamp DEFAULT NOW(),
+    updated_at timestamp NOT NULL DEFAULT NOW()
 );
 
 CREATE TABLE IF NOT EXISTS recipe_tag
 (
-    recipe_id uuid references recipe(id) NOT NULL,
-    tag_id int references tag(id) NOT NULL,
-    added_by uuid references fp_user(id) NOT NULL,
-    added_at date DEFAULT NOW(),
-    updated_at date NOT NULL DEFAULT NOW()
+    recipe_id uuid NOT NULL references recipe(id) ON DELETE CASCADE,
+    tag_id int NOT NULL references tag(id) ON DELETE CASCADE,
+    added_by text references fp_user(username),
+    added_at timestamp DEFAULT NOW(),
+    updated_at timestamp NOT NULL DEFAULT NOW()
 );
