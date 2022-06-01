@@ -1,4 +1,4 @@
 /*
     Gets all users
 */
-SELECT * FROM fp_user
+SELECT id, username FROM fp_user

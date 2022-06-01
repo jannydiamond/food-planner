@@ -68,15 +68,15 @@ householdsRouter.post('/', verifyToken, async (req: Request, res: Response) => {
 })
 
 householdsRouter.put(
-  '/:id',
+  '/:householdId',
   verifyToken,
   async (req: Request, res: Response) => {
-    const { id } = req.params
+    const { householdId } = req.params
     const { household_name } = req.body
 
     try {
       db.tx('tx-update-household', async () => {
-        const household = await db.households.findById(id)
+        const household = await db.households.findById(householdId)
 
         if (!household) return
 
@@ -125,12 +125,12 @@ householdsRouter.delete(
  ************************************************/
 
 householdsRouter.get(
-  '/:id',
+  '/:householdId',
   verifyToken,
   async (req: Request, res: Response) => {
-    const { id } = req.params
+    const { householdId } = req.params
     try {
-      const data = await db.households.findById(id)
+      const data = await db.households.findById(householdId)
       res.json({
         success: true,
         data,
@@ -149,13 +149,13 @@ householdsRouter.get(
  ************************************************/
 
 householdsRouter.get(
-  '/:id/users',
+  '/:householdId/users',
   verifyToken,
   async (req: Request, res: Response) => {
-    const { id } = req.params
+    const { householdId } = req.params
 
     try {
-      const data = await db.households.selectAllUsersOfHousehold(id)
+      const data = await db.households.selectAllUsersOfHousehold(householdId)
       res.json({
         success: true,
         data,
@@ -170,10 +170,10 @@ householdsRouter.get(
 )
 
 householdsRouter.post(
-  '/:id/users',
+  '/:householdId/users',
   verifyToken,
   async (req: Request, res: Response, next: NextFunction) => {
-    const { id } = req.params
+    const { householdId } = req.params
     const { user_id } = req.body
 
     const existingUser = await db.fpUsers.findById(user_id)
@@ -185,7 +185,7 @@ householdsRouter.post(
     }
 
     try {
-      const data = await db.households.addUserToHousehold(id, user_id)
+      const data = await db.households.addUserToHousehold(householdId, user_id)
 
       res.json({
         success: true,
@@ -201,13 +201,13 @@ householdsRouter.post(
 )
 
 householdsRouter.delete(
-  '/:id/users',
+  '/:householdId/users',
   verifyToken,
   async (req: Request, res: Response, next: NextFunction) => {
-    const { id } = req.params
+    const { householdId } = req.params
     const { user_id } = req.body
 
-    const household = await db.households.findById(id)
+    const household = await db.households.findById(householdId)
     const creator = await db.fpUsers.findById(user_id)
     const userIsCreatorOfHousehold = household?.created_by === creator?.username
 
@@ -218,7 +218,7 @@ householdsRouter.delete(
     }
 
     try {
-      await db.households.removeUserFromHousehold(id, user_id)
+      await db.households.removeUserFromHousehold(householdId, user_id)
       res.json({
         success: true,
         data: 'Successfully removed user from household!',

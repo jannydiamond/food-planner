@@ -19,21 +19,46 @@ usersRouter.get('/', verifyToken, async (_req: Request, res: Response) => {
   }
 })
 
-usersRouter.get('/:id', verifyToken, async (req: Request, res: Response) => {
-  const { id } = req.params
+usersRouter.get(
+  '/:userId',
+  verifyToken,
+  async (req: Request, res: Response) => {
+    const { userId } = req.params
 
-  try {
-    const data = await db.fpUsers.findById(parseInt(id))
-    res.json({
-      success: true,
-      data,
-    })
-  } catch (error: any) {
-    res.json({
-      success: false,
-      error: error.message || error,
-    })
+    try {
+      const data = await db.fpUsers.findById(parseInt(userId))
+      res.json({
+        success: true,
+        data,
+      })
+    } catch (error: any) {
+      res.json({
+        success: false,
+        error: error.message || error,
+      })
+    }
   }
-})
+)
+
+usersRouter.get(
+  '/:username',
+  verifyToken,
+  async (req: Request, res: Response) => {
+    const { username } = req.params
+
+    try {
+      const data = await db.fpUsers.findByName(username)
+      res.json({
+        success: true,
+        data,
+      })
+    } catch (error: any) {
+      res.json({
+        success: false,
+        error: error.message || error,
+      })
+    }
+  }
+)
 
 export default usersRouter

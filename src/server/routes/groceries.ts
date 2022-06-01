@@ -20,13 +20,13 @@ groceriesRouter.get('/', verifyToken, async (_req: Request, res: Response) => {
 })
 
 groceriesRouter.get(
-  '/:id',
+  '/:groceryId',
   verifyToken,
   async (req: Request, res: Response) => {
-    const { id } = req.params
+    const { groceryId } = req.params
 
     try {
-      const data = await db.groceries.findById(parseInt(id))
+      const data = await db.groceries.findById(groceryId)
       res.json({
         success: true,
         data,

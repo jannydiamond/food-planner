@@ -33,12 +33,12 @@ export class GroceriesRepository {
   //TODO Update
 
   // Tries to delete an grocery by id, and returns the number of records deleted
-  async remove(id: number): Promise<number> {
+  async remove(id: string): Promise<number> {
     return this.db.result(sql.remove, id, (result: IResult) => result.rowCount)
   }
 
   // Tries to find an grocery by id
-  async findById(id: number): Promise<Grocery | null> {
+  async findById(id: string): Promise<Grocery | null> {
     return this.db.oneOrNone(sql.findById, { id })
   }
 
