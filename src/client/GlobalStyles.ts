@@ -23,5 +23,13 @@ const GlobalStyle = createGlobalStyle`
     background: #333;
     color: #fff;
   }
+
+  a {
+    color: #16a085;
+
+    &:hover {
+      color: #1abc9c;
+    }
+  }
 `
 export default GlobalStyle

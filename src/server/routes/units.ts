@@ -19,21 +19,25 @@ unitsRouter.get('/', verifyToken, async (_req: Request, res: Response) => {
   }
 })
 
-unitsRouter.get('/:id', verifyToken, async (req: Request, res: Response) => {
-  const { id } = req.params
+unitsRouter.get(
+  '/:unitId',
+  verifyToken,
+  async (req: Request, res: Response) => {
+    const { unitId } = req.params
 
-  try {
-    const data = await db.units.findById(parseInt(id))
-    res.json({
-      success: true,
-      data,
-    })
-  } catch (error: any) {
-    res.json({
-      success: false,
-      error: error.message || error,
-    })
+    try {
+      const data = await db.units.findById(parseInt(unitId))
+      res.json({
+        success: true,
+        data,
+      })
+    } catch (error: any) {
+      res.json({
+        success: false,
+        error: error.message || error,
+      })
+    }
   }
-})
+)
 
 export default unitsRouter

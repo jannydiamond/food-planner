@@ -109,8 +109,8 @@ export class HouseholdsRepository {
   }
 
   // Returns all users of an household
-  async selectAllUsersOfHousehold(id: string): Promise<FpUser[]> {
-    return this.db.any(sql.selectAllUsersOfHousehold, { user_id: id })
+  async selectAllUsersOfHousehold(household_id: string): Promise<FpUser[]> {
+    return this.db.any(sql.selectAllUsersOfHousehold, { household_id })
   }
 
   // Tries to find household by id
