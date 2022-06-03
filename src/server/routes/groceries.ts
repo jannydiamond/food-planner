@@ -7,10 +7,7 @@ const groceriesRouter = express.Router()
 groceriesRouter.get('/', verifyToken, async (_req: Request, res: Response) => {
   try {
     const data = await db.groceries.selectAll()
-    res.json({
-      success: true,
-      data,
-    })
+    res.status(200).json(data)
   } catch (error: any) {
     res.json({
       success: false,
@@ -27,10 +24,7 @@ groceriesRouter.get(
 
     try {
       const data = await db.groceries.findById(groceryId)
-      res.json({
-        success: true,
-        data,
-      })
+      res.status(200).json(data)
     } catch (error: any) {
       res.json({
         success: false,

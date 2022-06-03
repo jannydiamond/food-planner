@@ -3,7 +3,6 @@ import {
   useGetAllUsersOfHouseholdQuery,
   useGetHouseholdByIdQuery,
 } from 'client/Redux/api/households'
-import { Household } from 'model/types'
 import React, { useCallback } from 'react'
 import AddForm from './AddForm'
 
@@ -31,7 +30,7 @@ const HouseholdUsers = ({ householdId }: Props) => {
 
   if (!household) return null
 
-  const { created_by } = household.data as Household
+  const { created_by } = household
 
   return (
     <>
@@ -43,7 +42,7 @@ const HouseholdUsers = ({ householdId }: Props) => {
           <AddForm id={householdId} />
           {users ? (
             <ul>
-              {users.data.map((user) => {
+              {users.map((user) => {
                 return (
                   <li key={user.id}>
                     {user.username}{' '}

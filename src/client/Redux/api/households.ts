@@ -1,54 +1,14 @@
 import { FpUser, Household, HouseholdHasUser } from 'model/types'
 import { foodplannerApi } from '.'
 
-type AllHouseholdsOfUserResponse = {
-  success: boolean
-  data: Household[]
-}
-
-type PostHouseholdResponse = {
-  success: boolean
-  data: Household[]
-}
-
-type PutHouseholdResponse = {
-  success: boolean
-  data: string // TODO: Return new household
-}
-
-type DeleteHouseholdResponse = {
-  success: boolean
-  data: string // TODO: Include household name in msg
-}
-
-type HouseholdByIdResponse = {
-  success: boolean
-  data: Household
-}
-
-type AllUsersOfHouseholdResponse = {
-  success: boolean
-  data: Pick<FpUser, 'id' | 'username'>[]
-}
-
-type PostUserToHouseholdResponse = {
-  success: boolean
-  data: HouseholdHasUser
-}
-
-type DeleteUserFromHouseholdResponse = {
-  success: boolean
-  data: string // TODO: Include username and household name in msg
-}
-
 export const householdsApi = foodplannerApi.injectEndpoints({
   endpoints: (builder) => ({
-    getAllHouseholdsOfUser: builder.query<AllHouseholdsOfUserResponse, void>({
+    getAllHouseholdsOfUser: builder.query<Household[], void>({
       query: () => `households`,
       providesTags: (result, error, arg) =>
         result
           ? [
-              ...result.data.map((household) => ({
+              ...result.map((household) => ({
                 type: 'Household' as const,
                 id: household.id,
               })),
@@ -57,7 +17,7 @@ export const householdsApi = foodplannerApi.injectEndpoints({
           : ['Household'],
     }),
     postHousehold: builder.mutation<
-      PostHouseholdResponse,
+      Household[],
       {
         household_name: string
       }
@@ -69,8 +29,9 @@ export const householdsApi = foodplannerApi.injectEndpoints({
       }),
       invalidatesTags: ['Household'],
     }),
+    // TODO: Return new household
     putHousehold: builder.mutation<
-      PutHouseholdResponse,
+      string,
       {
         id: string
         household_name: string
@@ -88,8 +49,9 @@ export const householdsApi = foodplannerApi.injectEndpoints({
         'Household',
       ],
     }),
+    // TODO: Include household name in result msg
     deleteHousehold: builder.mutation<
-      DeleteHouseholdResponse,
+      string,
       {
         id: string
       }
@@ -101,19 +63,22 @@ export const householdsApi = foodplannerApi.injectEndpoints({
       }),
       invalidatesTags: ['Household'],
     }),
-    getHouseholdById: builder.query<HouseholdByIdResponse, string>({
+    getHouseholdById: builder.query<Household, string>({
       query: (id) => `households/${id}`,
       providesTags: (result, error, arg) =>
         result
-          ? [{ type: 'Household', id: result.data.id }, 'Household']
+          ? [{ type: 'Household', id: result.id }, 'Household']
           : ['Household'],
     }),
-    getAllUsersOfHousehold: builder.query<AllUsersOfHouseholdResponse, string>({
+    getAllUsersOfHousehold: builder.query<
+      Pick<FpUser, 'id' | 'username'>[],
+      string
+    >({
       query: (id) => `households/${id}/users`,
       providesTags: (result, error, arg) =>
         result
           ? [
-              ...result.data.map((user) => ({
+              ...result.map((user) => ({
                 type: 'UserOfHousehold' as const,
                 id: user.id,
               })),
@@ -124,7 +89,7 @@ export const householdsApi = foodplannerApi.injectEndpoints({
           : ['UserOfHousehold'],
     }),
     postUserToHousehold: builder.mutation<
-      PostUserToHouseholdResponse,
+      HouseholdHasUser,
       {
         user_id: string
         household_id: string
@@ -142,8 +107,9 @@ export const householdsApi = foodplannerApi.injectEndpoints({
         { type: 'Household', id: arg.household_id },
       ],
     }),
+    // TODO: Include username and household name in result msg
     deleteUserFromHousehold: builder.mutation<
-      DeleteUserFromHouseholdResponse,
+      string,
       {
         user_id: string
         household_id: string
@@ -162,6 +128,7 @@ export const householdsApi = foodplannerApi.injectEndpoints({
       ],
     }),
   }),
+  overrideExisting: false,
 })
 
 export const {

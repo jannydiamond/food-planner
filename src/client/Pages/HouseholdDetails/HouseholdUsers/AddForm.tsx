@@ -26,9 +26,8 @@ const AddForm = (props: Props) => {
 
   const handleAddUser = useCallback(
     async (data: AddUserFormData) => {
-      const userToAdd = users?.data.find(
-        (user) => user.username === data.username
-      )
+      const userToAdd =
+        users && users.find((user) => user.username === data.username)
 
       if (!userToAdd) return
 
@@ -37,7 +36,7 @@ const AddForm = (props: Props) => {
         household_id: props.id,
       })
     },
-    [addUser, props.id, users?.data]
+    [addUser, props.id, users]
   )
 
   return (

@@ -19,7 +19,7 @@ const slice = createSlice({
     builder.addMatcher(
       authenticationApi.endpoints.postLogin.matchFulfilled,
       (state, { payload }) => {
-        state.token = payload.token
+        state.token = payload
       }
     )
   },

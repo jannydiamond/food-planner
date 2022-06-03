@@ -1,29 +1,14 @@
 import { FpUser } from 'model/types'
 import { foodplannerApi } from '.'
 
-type UserByIdResponse = {
-  success: boolean
-  data: Pick<FpUser, 'id' | 'username'>
-}
-
-type UserByNameResponse = {
-  success: boolean
-  data: Pick<FpUser, 'id' | 'username'>
-}
-
-type AllUsersResponse = {
-  success: boolean
-  data: Pick<FpUser, 'id' | 'username'>[]
-}
-
 export const usersApi = foodplannerApi.injectEndpoints({
   endpoints: (builder) => ({
-    getAllUsers: builder.query<AllUsersResponse, void>({
+    getAllUsers: builder.query<Pick<FpUser, 'id' | 'username'>[], void>({
       query: () => `users`,
       providesTags: (result, error, arg) =>
         result
           ? [
-              ...result.data.map((user) => ({
+              ...result.map((user) => ({
                 type: 'User' as const,
                 id: user.id,
               })),
@@ -31,17 +16,18 @@ export const usersApi = foodplannerApi.injectEndpoints({
             ]
           : ['User'],
     }),
-    getUserById: builder.query<UserByIdResponse, string>({
+    getUserById: builder.query<Pick<FpUser, 'id' | 'username'>, string>({
       query: (id) => `users/${id}`,
       providesTags: (result, error, arg) =>
-        result ? [{ type: 'User', id: result.data.id }, 'User'] : ['User'],
+        result ? [{ type: 'User', id: result.id }, 'User'] : ['User'],
     }),
-    getUserByName: builder.query<UserByNameResponse, string>({
+    getUserByName: builder.query<Pick<FpUser, 'id' | 'username'>, string>({
       query: (username) => `users/${username}`,
       providesTags: (result, error, arg) =>
-        result ? [{ type: 'User', id: result.data.id }, 'User'] : ['User'],
+        result ? [{ type: 'User', id: result.id }, 'User'] : ['User'],
     }),
   }),
+  overrideExisting: false,
 })
 
 export const {

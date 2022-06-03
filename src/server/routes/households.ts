@@ -20,10 +20,7 @@ householdsRouter.get('/', verifyToken, async (req: Request, res: Response) => {
 
   try {
     const data = await db.households.selectAllHouseholdsOfUser(currentUser.id)
-    res.json({
-      success: true,
-      data,
-    })
+    res.status(200).json(data)
   } catch (error: any) {
     res.json({
       success: false,
@@ -48,10 +45,7 @@ householdsRouter.post('/', verifyToken, async (req: Request, res: Response) => {
       .then(async (data) => {
         const addedHousehold = await db.households.findById(data.household_id)
 
-        res.json({
-          success: true,
-          data: addedHousehold,
-        })
+        res.status(200).json(addedHousehold)
       })
       .catch((error: any) => {
         res.json({
@@ -86,10 +80,7 @@ householdsRouter.put(
         })
       })
 
-      res.json({
-        success: true,
-        data: 'Household successfully updated!',
-      })
+      res.status(200).json('Household successfully updated!')
     } catch (error: any) {
       res.json({
         success: false,
@@ -107,10 +98,7 @@ householdsRouter.delete(
 
     try {
       await db.households.remove(id)
-      res.json({
-        success: true,
-        data: 'Successfully removed household!',
-      })
+      res.status(200).json('Successfully removed household!')
     } catch (error: any) {
       res.json({
         success: false,
@@ -131,10 +119,7 @@ householdsRouter.get(
     const { householdId } = req.params
     try {
       const data = await db.households.findById(householdId)
-      res.json({
-        success: true,
-        data,
-      })
+      res.status(200).json(data)
     } catch (error: any) {
       res.json({
         success: false,
@@ -156,10 +141,7 @@ householdsRouter.get(
 
     try {
       const data = await db.households.selectAllUsersOfHousehold(householdId)
-      res.json({
-        success: true,
-        data,
-      })
+      res.status(200).json(data)
     } catch (error: any) {
       res.json({
         success: false,
@@ -187,10 +169,7 @@ householdsRouter.post(
     try {
       const data = await db.households.addUserToHousehold(householdId, user_id)
 
-      res.json({
-        success: true,
-        data,
-      })
+      res.status(200).json(data)
     } catch (error: any) {
       res.json({
         success: false,
@@ -219,10 +198,7 @@ householdsRouter.delete(
 
     try {
       await db.households.removeUserFromHousehold(householdId, user_id)
-      res.json({
-        success: true,
-        data: 'Successfully removed user from household!',
-      })
+      res.status(200).json('Successfully removed user from household!')
     } catch (error: any) {
       res.json({
         success: false,

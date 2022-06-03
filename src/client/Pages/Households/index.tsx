@@ -18,9 +18,9 @@ const Households = () => {
       <AddForm />
       <h2>Listing</h2>
       {isLoadingHouseholds && <p>Loading...</p>}
-      {households && households.data.length > 0 && (
+      {households && households.length > 0 && (
         <ul>
-          {households.data.map((household: Household) => (
+          {households.map((household: Household) => (
             <li key={household.id}>
               <b>{household.household_name}</b>{' '}
               <button

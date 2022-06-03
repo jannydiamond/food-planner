@@ -4,21 +4,10 @@ import { foodplannerApi } from '.'
 
 export type Token = string
 
-type PostRegistrationResponse = {
-  success: boolean
-  data: FpUser
-}
-
-type PostLoginResponse = {
-  success: boolean
-  token: Token
-  user: FpUser
-}
-
 export const authenticationApi = foodplannerApi.injectEndpoints({
   endpoints: (builder) => ({
     postRegistration: builder.mutation<
-      PostRegistrationResponse,
+      FpUser,
       {
         username: string
         password: string
@@ -31,7 +20,7 @@ export const authenticationApi = foodplannerApi.injectEndpoints({
       }),
     }),
     postLogin: builder.mutation<
-      PostLoginResponse,
+      Token,
       {
         username: string
         password: string
@@ -45,7 +34,7 @@ export const authenticationApi = foodplannerApi.injectEndpoints({
       onQueryStarted: async (_, { queryFulfilled }) => {
         const { data } = await queryFulfilled
 
-        setAuthToken(data.token)
+        setAuthToken(data)
       },
     }),
   }),

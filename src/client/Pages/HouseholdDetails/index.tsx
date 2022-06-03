@@ -2,7 +2,6 @@ import {
   useDeleteHouseholdMutation,
   useGetHouseholdByIdQuery,
 } from 'client/Redux/api/households'
-import { Household } from 'model/types'
 import React, { useCallback, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useParams } from 'react-router-dom'
@@ -32,7 +31,7 @@ const HouseholdDetails = () => {
 
   if (!household) return null
 
-  const { household_name, created_by } = household.data as Household
+  const { household_name, created_by } = household
 
   return (
     <>
@@ -49,7 +48,7 @@ const HouseholdDetails = () => {
           </p>
           {isEditing && (
             <EditForm
-              household={household.data}
+              household={household}
               finished={() => setIsEditing(false)}
             />
           )}

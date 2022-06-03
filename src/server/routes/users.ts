@@ -7,10 +7,7 @@ const usersRouter = express.Router()
 usersRouter.get('/', verifyToken, async (_req: Request, res: Response) => {
   try {
     const data = await db.fpUsers.selectAll()
-    res.json({
-      success: true,
-      data,
-    })
+    res.status(200).json(data)
   } catch (error: any) {
     res.json({
       success: false,
@@ -27,10 +24,7 @@ usersRouter.get(
 
     try {
       const data = await db.fpUsers.findById(parseInt(userId))
-      res.json({
-        success: true,
-        data,
-      })
+      res.status(200).json(data)
     } catch (error: any) {
       res.json({
         success: false,
@@ -48,10 +42,7 @@ usersRouter.get(
 
     try {
       const data = await db.fpUsers.findByName(username)
-      res.json({
-        success: true,
-        data,
-      })
+      res.status(200).json(data)
     } catch (error: any) {
       res.json({
         success: false,

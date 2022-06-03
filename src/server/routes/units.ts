@@ -7,10 +7,7 @@ const unitsRouter = express.Router()
 unitsRouter.get('/', verifyToken, async (_req: Request, res: Response) => {
   try {
     const data = await db.units.selectAll()
-    res.json({
-      success: true,
-      data,
-    })
+    res.status(200).json(data)
   } catch (error: any) {
     res.json({
       success: false,
@@ -27,10 +24,7 @@ unitsRouter.get(
 
     try {
       const data = await db.units.findById(parseInt(unitId))
-      res.json({
-        success: true,
-        data,
-      })
+      res.status(200).json(data)
     } catch (error: any) {
       res.json({
         success: false,

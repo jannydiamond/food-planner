@@ -36,10 +36,7 @@ authRouter.post(
         password: bcrypt.hashSync(password, 10),
       })
 
-      res.json({
-        success: true,
-        data,
-      })
+      res.status(200).json(data)
     } catch (error: any) {
       res.json({
         success: false,
@@ -93,11 +90,7 @@ authRouter.post(
       username: existingUser.username,
     })
 
-    res.statusCode = 200
-    res.json({
-      success: true,
-      token,
-    })
+    res.status(200).json(token)
   }
 )
 

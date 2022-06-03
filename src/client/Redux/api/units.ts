@@ -1,25 +1,16 @@
 import { Unit } from 'model/types'
 import { foodplannerApi } from '.'
 
-type AllUnitsResponse = {
-  success: boolean
-  data: Unit[]
-}
-
-type UnitByIdResponse = {
-  success: boolean
-  data: Unit
-}
-
 export const unitsApi = foodplannerApi.injectEndpoints({
   endpoints: (builder) => ({
-    getAllUnits: builder.query<AllUnitsResponse, void>({
+    getAllUnits: builder.query<Unit[], void>({
       query: () => `units`,
     }),
-    getUnitById: builder.query<UnitByIdResponse, string>({
+    getUnitById: builder.query<Unit, string>({
       query: (id) => `units/${id}`,
     }),
   }),
+  overrideExisting: false,
 })
 
 export const { useGetAllUnitsQuery, useGetUnitByIdQuery } = unitsApi
