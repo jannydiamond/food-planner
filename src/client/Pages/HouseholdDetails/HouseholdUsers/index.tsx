@@ -2,7 +2,7 @@ import {
   useDeleteUserFromHouseholdMutation,
   useGetAllUsersOfHouseholdQuery,
   useGetHouseholdByIdQuery,
-} from 'client/Redux/api'
+} from 'client/Redux/api/households'
 import { Household } from 'model/types'
 import React, { useCallback } from 'react'
 import AddForm from './AddForm'
@@ -45,7 +45,7 @@ const HouseholdUsers = ({ householdId }: Props) => {
             <ul>
               {users.data.map((user) => {
                 return (
-                  <li>
+                  <li key={user.id}>
                     {user.username}{' '}
                     {user.username !== created_by && (
                       <button onClick={() => handleDeleteUser(user.id)}>

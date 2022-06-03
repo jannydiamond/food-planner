@@ -1,4 +1,4 @@
-import { usePutHouseholdMutation } from 'client/Redux/api'
+import { usePutHouseholdMutation } from 'client/Redux/api/households'
 import { Household } from 'model/types'
 import React, { useCallback } from 'react'
 import { useForm } from 'react-hook-form'

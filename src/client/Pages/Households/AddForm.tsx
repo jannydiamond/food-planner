@@ -1,4 +1,4 @@
-import { usePostHouseholdMutation } from 'client/Redux/api'
+import { usePostHouseholdMutation } from 'client/Redux/api/households'
 import React, { useCallback } from 'react'
 import { useForm } from 'react-hook-form'
 

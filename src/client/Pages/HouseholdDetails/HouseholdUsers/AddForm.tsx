@@ -1,7 +1,5 @@
-import {
-  useGetAllUsersQuery,
-  usePostUserToHouseholdMutation,
-} from 'client/Redux/api'
+import { usePostUserToHouseholdMutation } from 'client/Redux/api/households'
+import { useGetAllUsersQuery } from 'client/Redux/api/users'
 import React, { useCallback } from 'react'
 import { useForm } from 'react-hook-form'
 

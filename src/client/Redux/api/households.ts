@@ -1,38 +1,5 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
-import { setAuthToken } from 'client/utils/localStorage'
-import { FpUser, Household, HouseholdHasUser, Unit } from 'model/types'
-import { RootState } from './store'
-
-export const BASE_URL = `${window.location.origin.toString()}`
-export const SERVER_BASE_URL = `${BASE_URL}/api/v1`
-
-export type Token = string
-
-type PostRegistrationResponse = {
-  success: boolean
-  data: FpUser
-}
-
-type PostLoginResponse = {
-  success: boolean
-  token: Token
-  user: FpUser
-}
-
-type UserByIdResponse = {
-  success: boolean
-  data: Pick<FpUser, 'id' | 'username'>
-}
-
-type UserByNameResponse = {
-  success: boolean
-  data: Pick<FpUser, 'id' | 'username'>
-}
-
-type AllUsersResponse = {
-  success: boolean
-  data: Pick<FpUser, 'id' | 'username'>[]
-}
+import { FpUser, Household, HouseholdHasUser } from 'model/types'
+import { foodplannerApi } from '.'
 
 type AllHouseholdsOfUserResponse = {
   success: boolean
@@ -74,87 +41,8 @@ type DeleteUserFromHouseholdResponse = {
   data: string // TODO: Include username and household name in msg
 }
 
-type AllUnitsResponse = {
-  success: boolean
-  data: Unit[]
-}
-
-type UnitByIdResponse = {
-  success: boolean
-  data: Unit
-}
-
-// Define a service using a base URL and expected endpoints
-export const foodplannerApi = createApi({
-  reducerPath: 'foodplannerApi',
-  baseQuery: fetchBaseQuery({
-    baseUrl: SERVER_BASE_URL,
-    prepareHeaders: (headers, { getState }) => {
-      // By default, if we have a token in the store, let's use that for authenticated requests
-      const token = (getState() as RootState).authentication.token
-      if (token) {
-        headers.set('authorization', `Bearer ${token}`)
-      }
-      return headers
-    },
-    credentials: 'include',
-  }),
-  tagTypes: ['User', 'Household', 'UserOfHousehold'],
+export const householdsApi = foodplannerApi.injectEndpoints({
   endpoints: (builder) => ({
-    postRegistration: builder.mutation<
-      PostRegistrationResponse,
-      {
-        username: string
-        password: string
-      }
-    >({
-      query: (registerData) => ({
-        url: `register`,
-        method: 'POST',
-        body: registerData,
-      }),
-    }),
-    postLogin: builder.mutation<
-      PostLoginResponse,
-      {
-        username: string
-        password: string
-      }
-    >({
-      query: (loginData) => ({
-        url: `login`,
-        method: 'POST',
-        body: loginData,
-      }),
-      onQueryStarted: async (_, { queryFulfilled }) => {
-        const { data } = await queryFulfilled
-
-        setAuthToken(data.token)
-      },
-    }),
-    getAllUsers: builder.query<AllUsersResponse, void>({
-      query: () => `users`,
-      providesTags: (result, error, arg) =>
-        result
-          ? [
-              ...result.data.map((user) => ({
-                type: 'User' as const,
-                id: user.id,
-              })),
-              'User',
-            ]
-          : ['User'],
-    }),
-    getUserById: builder.query<UserByIdResponse, string>({
-      query: (id) => `users/${id}`,
-      providesTags: (result, error, arg) =>
-        result ? [{ type: 'User', id: result.data.id }, 'User'] : ['User'],
-    }),
-    getUserByName: builder.query<UserByNameResponse, string>({
-      query: (username) => `users/${username}`,
-      providesTags: (result, error, arg) =>
-        result ? [{ type: 'User', id: result.data.id }, 'User'] : ['User'],
-    }),
     getAllHouseholdsOfUser: builder.query<AllHouseholdsOfUserResponse, void>({
       query: () => `households`,
       providesTags: (result, error, arg) =>
@@ -197,6 +85,7 @@ export const foodplannerApi = createApi({
       }),
       invalidatesTags: (result, error, arg) => [
         { type: 'Household', id: arg.id },
+        'Household',
       ],
     }),
     deleteHousehold: builder.mutation<
@@ -272,23 +161,10 @@ export const foodplannerApi = createApi({
         { type: 'Household', id: arg.household_id },
       ],
     }),
-    getAllUnits: builder.query<AllUnitsResponse, void>({
-      query: () => `units`,
-    }),
-    getUnitById: builder.query<UnitByIdResponse, string>({
-      query: (id) => `units/${id}`,
-    }),
   }),
 })
 
-// Export hooks for usage in function components, which are
-// auto-generated based on the defined endpoints
 export const {
-  usePostRegistrationMutation,
-  usePostLoginMutation,
-  useGetAllUsersQuery,
-  useGetUserByIdQuery,
-  useGetUserByNameQuery,
   useGetAllHouseholdsOfUserQuery,
   usePostHouseholdMutation,
   usePutHouseholdMutation,
@@ -297,6 +173,4 @@ export const {
   useGetAllUsersOfHouseholdQuery,
   usePostUserToHouseholdMutation,
   useDeleteUserFromHouseholdMutation,
-  useGetAllUnitsQuery,
-  useGetUnitByIdQuery,
-} = foodplannerApi
+} = householdsApi

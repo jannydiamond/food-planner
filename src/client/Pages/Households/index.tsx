@@ -1,4 +1,4 @@
-import { useGetAllHouseholdsOfUserQuery } from 'client/Redux/api'
+import { useGetAllHouseholdsOfUserQuery } from 'client/Redux/api/households'
 import React from 'react'
 import { Household } from 'model/types'
 import AddForm from './AddForm'

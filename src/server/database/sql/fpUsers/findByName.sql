@@ -1,4 +1,4 @@
 /*
     Finds user by name
 */
-SELECT * FROM fp_user WHERE username = ${username}
+SELECT id, username FROM fp_user WHERE username = ${username}

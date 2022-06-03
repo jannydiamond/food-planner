@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { foodplannerApi, Token } from '../api'
-import { RootState } from '../store'
+import { authenticationApi, Token } from 'client/Redux/api/authentication'
+import { RootState } from 'client/Redux/store'
 
 type AuthenticationState = {
   token: Token | null
@@ -17,7 +17,7 @@ const slice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addMatcher(
-      foodplannerApi.endpoints.postLogin.matchFulfilled,
+      authenticationApi.endpoints.postLogin.matchFulfilled,
       (state, { payload }) => {
         state.token = payload.token
       }

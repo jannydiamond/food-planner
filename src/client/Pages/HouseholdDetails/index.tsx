@@ -1,7 +1,7 @@
 import {
   useDeleteHouseholdMutation,
   useGetHouseholdByIdQuery,
-} from 'client/Redux/api'
+} from 'client/Redux/api/households'
 import { Household } from 'model/types'
 import React, { useCallback, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
