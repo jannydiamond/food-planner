@@ -23,7 +23,7 @@ usersRouter.get(
     const { userId } = req.params
 
     try {
-      const data = await db.fpUsers.findById(parseInt(userId))
+      const data = await db.fpUsers.findById(userId)
       res.status(200).json(data)
     } catch (error: any) {
       res.json({

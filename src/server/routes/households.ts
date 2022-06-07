@@ -1,13 +1,7 @@
 import express, { NextFunction, Request, Response } from 'express'
-import { FpUser } from '../../model/types'
 import { verifyToken } from '../auth'
 import { db } from '../database'
-
-type RequestWithUser = Request & {
-  user: {
-    user: FpUser
-  }
-}
+import { RequestWithUser } from '../types'
 
 const householdsRouter = express.Router()
 
@@ -109,7 +103,7 @@ householdsRouter.delete(
 )
 
 /*************************************************
- * Households Others
+ * Households get by
  ************************************************/
 
 householdsRouter.get(

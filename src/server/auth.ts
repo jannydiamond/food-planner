@@ -25,8 +25,6 @@ export const verifyToken: any = (
   }
 
   jwt.verify(token as string, TOKEN_SECRET as string, (err: any, user: any) => {
-    console.log(err)
-
     if (err) {
       res.statusCode = 403
       res.send('Forbidden!')
