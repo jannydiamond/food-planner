@@ -33,12 +33,12 @@ export class FpUsersRepository {
   //TODO Update
 
   // Tries to delete a fpUser by id, and returns the number of records deleted
-  async remove(id: number): Promise<number> {
+  async remove(id: string): Promise<number> {
     return this.db.result(sql.remove, id, (result: IResult) => result.rowCount)
   }
 
   // Tries to find a fpUser by id
-  async findById(id: number): Promise<FpUser | null> {
+  async findById(id: string): Promise<FpUser | null> {
     return this.db.oneOrNone(sql.findById, { id })
   }
 

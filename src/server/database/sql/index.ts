@@ -44,6 +44,7 @@ export const groceries = {
   remove: sql('groceries/remove.sql'),
   selectAll: sql('groceries/selectAll.sql'),
   findById: sql('groceries/findById.sql'),
+  findByName: sql('groceries/findByName.sql'),
 }
 
 export const units = {
@@ -52,4 +53,5 @@ export const units = {
   remove: sql('units/remove.sql'),
   selectAll: sql('units/selectAll.sql'),
   findById: sql('units/findById.sql'),
+  findByName: sql('units/findByName.sql'),
 }

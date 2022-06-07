@@ -26,7 +26,7 @@ export class UnitsRepository {
   }
 
   // Adds a new unit, and returns the new object
-  async add(unit: Unit): Promise<Unit> {
+  async add(unit: Pick<Unit, 'unit_name' | 'created_by'>): Promise<Unit> {
     return this.db.one(sql.add, unit)
   }
 
@@ -34,12 +34,21 @@ export class UnitsRepository {
 
   // Tries to delete a unit by id, and returns the number of records deleted
   async remove(id: number): Promise<number> {
-    return this.db.result(sql.remove, id, (result: IResult) => result.rowCount)
+    return this.db.result(
+      sql.remove,
+      { id },
+      (result: IResult) => result.rowCount
+    )
   }
 
   // Tries to find a unit by id
   async findById(id: number): Promise<Unit | null> {
-    return this.db.oneOrNone(sql.findById, id)
+    return this.db.oneOrNone(sql.findById, { id })
+  }
+
+  // Tries to find a unit by name
+  async findByName(unit_name: string): Promise<Unit | null> {
+    return this.db.oneOrNone(sql.findByName, { unit_name })
   }
 
   // Returns all unit records
