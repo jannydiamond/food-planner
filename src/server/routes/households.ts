@@ -85,13 +85,13 @@ householdsRouter.put(
 )
 
 householdsRouter.delete(
-  '/',
+  '/:householdId',
   verifyToken,
   async (req: Request, res: Response) => {
-    const { id } = req.body
+    const { householdId } = req.params
 
     try {
-      await db.households.remove(id)
+      await db.households.remove(householdId)
       res.status(200).json('Successfully removed household!')
     } catch (error: any) {
       res.json({
@@ -174,15 +174,15 @@ householdsRouter.post(
 )
 
 householdsRouter.delete(
-  '/:householdId/users',
+  '/:householdId/users/:userId',
   verifyToken,
   async (req: Request, res: Response, next: NextFunction) => {
-    const { householdId } = req.params
-    const { user_id } = req.body
+    const { householdId, userId } = req.params
 
     const household = await db.households.findById(householdId)
-    const creator = await db.fpUsers.findById(user_id)
-    const userIsCreatorOfHousehold = household?.created_by === creator?.username
+    const userToRemove = await db.fpUsers.findById(userId)
+    const userIsCreatorOfHousehold =
+      household?.created_by === userToRemove?.username
 
     if (userIsCreatorOfHousehold) {
       res.statusCode = 403
@@ -191,7 +191,7 @@ householdsRouter.delete(
     }
 
     try {
-      await db.households.removeUserFromHousehold(householdId, user_id)
+      await db.households.removeUserFromHousehold(householdId, userId)
       res.status(200).json('Successfully removed user from household!')
     } catch (error: any) {
       res.json({
