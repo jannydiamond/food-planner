@@ -5,6 +5,15 @@ import { RequestWithUser } from '../types'
 
 const unitsRouter = express.Router()
 
+/**
+ * @swagger
+ * /:
+ *   get:
+ *     description: Welcome to swagger-jsdoc!
+ *     responses:
+ *       200:
+ *         description: Returns a mysterious string.
+ */
 unitsRouter.get('/', verifyToken, async (_req: Request, res: Response) => {
   try {
     const data = await db.units.selectAll()

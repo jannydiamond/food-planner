@@ -1,17 +1,33 @@
 import express, { Express } from 'express'
 import helmet from 'helmet'
 import cors from 'cors'
-import authRouter from './routes/auth'
+import swaggerUi from 'swagger-ui-express'
+import swaggerJSDoc from 'swagger-jsdoc'
 
+import authRouter from './routes/auth'
 import groceriesRouter from './routes/groceries'
 import unitsRouter from './routes/units'
 import usersRouter from './routes/users'
 import householdsRouter from './routes/households'
+import path from 'path'
 
 const app: Express = express()
 
 const hostname = process.env.HOST ? process.env.HOST : '0.0.0.0'
 const port = process.env.PORT ? parseInt(process.env.PORT) : 8080
+
+const options: swaggerJSDoc.Options = {
+  definition: {
+    openapi: '3.0.0',
+    info: {
+      title: 'Hello World',
+      version: '1.0.0',
+    },
+  },
+  apis: ['./src/routes/*.ts'], // files containing annotations as above
+}
+
+const swaggerSpec = swaggerJSDoc(options)
 
 const apiVersion = 'v1'
 const basePath = `/api/${apiVersion}`
@@ -26,12 +42,15 @@ app.use(
     extended: true,
   })
 )
+app.use(express.static(path.join(__dirname, 'public')))
 
 app.use(`${basePath}`, authRouter)
 app.use(`${basePath}/users`, usersRouter)
 app.use(`${basePath}/households`, householdsRouter)
 app.use(`${basePath}/groceries`, groceriesRouter)
 app.use(`${basePath}/units`, unitsRouter)
+
+app.use(`${basePath}/api-docs`, swaggerUi.serve, swaggerUi.setup(swaggerSpec))
 
 app.listen(port, hostname, () => {
   console.log(`Server running at http://${hostname}:${port}/`)
