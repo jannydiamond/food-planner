@@ -1,6 +1,7 @@
 import { usePostLoginMutation } from 'client/Redux/api/authentication'
 import React, { useCallback } from 'react'
 import { useForm } from 'react-hook-form'
+import { Link } from 'react-router-dom'
 import { useLocation, useNavigate } from 'react-router-dom'
 
 type LoginFormData = {
@@ -74,6 +75,8 @@ const Login = () => {
           <input type="submit" />
         </fieldset>
       </form>
+
+      <Link to={'/register'}>Register</Link>
     </>
   )
 }
