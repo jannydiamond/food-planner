@@ -11,6 +11,8 @@ import Registration from './Pages/Registration'
 import PrivateRoute from './App/PrivateRoute'
 import HouseholdDetails from './Pages/HouseholdDetails'
 import Header from './components/Header'
+import Groceries from './Pages/Groceries'
+import GroceryDetails from './Pages/GroceryDetails'
 
 const Routes = () => {
   return (
@@ -31,6 +33,8 @@ const Routes = () => {
         <Route path="/" element={<Navigate to="/households" replace />} />
         <Route path="/households" element={<Households />} />
         <Route path="/households/:householdId" element={<HouseholdDetails />} />
+        <Route path="/groceries" element={<Groceries />} />
+        <Route path="/groceries/:groceryId" element={<GroceryDetails />} />
       </Route>
     </ReactRouterRoutes>
   )

@@ -15,6 +15,7 @@ CREATE TABLE IF NOT EXISTS household
     household_name text NOT NULL,
     created_by text references fp_user(username),
     created_at timestamp DEFAULT NOW(),
+    updated_by text references fp_user(username),
     updated_at timestamp NOT NULL DEFAULT NOW()
 );
 
@@ -52,7 +53,7 @@ CREATE TABLE IF NOT EXISTS unit
 CREATE TABLE IF NOT EXISTS grocery
 (
     id uuid NOT NULL PRIMARY KEY DEFAULT gen_random_uuid(),
-    grocery_name text NOT NULL UNIQUE,
+    grocery_name text NOT NULL,
     base_amount int,
     base_unit text references unit(unit_name),
     alt_amount int,

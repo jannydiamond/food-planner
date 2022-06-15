@@ -140,10 +140,10 @@ groceriesRouter.delete(
   '/:groceryId',
   verifyToken,
   async (req: Request, res: Response) => {
-    const { grocerId } = req.params
+    const { groceryId } = req.params
 
     try {
-      await db.groceries.remove(grocerId)
+      await db.groceries.remove(groceryId)
       res.status(200).json('Successfully removed grocery!')
     } catch (error: any) {
       res.json({
