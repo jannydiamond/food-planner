@@ -3,8 +3,7 @@ import {
   useGetHouseholdByIdQuery,
 } from 'client/Redux/api/households'
 import React, { useCallback, useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
-import { useParams } from 'react-router-dom'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 import EditForm from './EditForm'
 import HouseholdUsers from './HouseholdUsers'
 
@@ -25,7 +24,7 @@ const HouseholdDetails = () => {
   ] = useDeleteHouseholdMutation()
 
   const handleDeleteHousehold = useCallback(async () => {
-    deleteHousehold({ id: householdId })
+    deleteHousehold(householdId)
     navigate('/', { replace: true })
   }, [deleteHousehold, householdId, navigate])
 

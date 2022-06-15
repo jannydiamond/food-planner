@@ -50,16 +50,10 @@ export const householdsApi = foodplannerApi.injectEndpoints({
       ],
     }),
     // TODO: Include household name in result msg
-    deleteHousehold: builder.mutation<
-      string,
-      {
-        id: string
-      }
-    >({
-      query: (householdsData) => ({
-        url: `households`,
+    deleteHousehold: builder.mutation<string, string>({
+      query: (id) => ({
+        url: `households/${id}`,
         method: 'DELETE',
-        body: householdsData,
       }),
       invalidatesTags: ['Household'],
     }),

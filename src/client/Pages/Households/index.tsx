@@ -7,17 +7,19 @@ import { useNavigate } from 'react-router-dom'
 const Households = () => {
   const navigate = useNavigate()
 
-  const { data: households, isLoading: isLoadingHouseholds } =
-    useGetAllHouseholdsOfUserQuery(undefined, {
+  const { data: households, isLoading } = useGetAllHouseholdsOfUserQuery(
+    undefined,
+    {
       refetchOnMountOrArgChange: true,
-    })
+    }
+  )
 
   return (
     <div>
       <h1>Households</h1>
       <AddForm />
       <h2>Listing</h2>
-      {isLoadingHouseholds && <p>Loading...</p>}
+      {isLoading && <p>Loading...</p>}
       {households && households.length > 0 && (
         <ul>
           {households.map((household: Household) => (

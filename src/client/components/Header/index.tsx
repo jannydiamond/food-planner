@@ -8,6 +8,12 @@ const Header = () => {
     <header>
       <NavLink to={'/'}>Foodplanner</NavLink>
       <LogoutButton />
+      <NavLink to="households">
+        {({ isActive }) => <span>Households{isActive ? ' (active)' : ''}</span>}
+      </NavLink>
+      <NavLink to="groceries">
+        {({ isActive }) => <span>Groceries{isActive ? ' (active)' : ''}</span>}
+      </NavLink>
     </header>
   )
 }
