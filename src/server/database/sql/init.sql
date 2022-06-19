@@ -50,6 +50,27 @@ CREATE TABLE IF NOT EXISTS unit
     updated_at timestamp NOT NULL DEFAULT NOW()
 );
 
+INSERT INTO unit (unit_name) VALUES 
+    ('Stück'),
+    ('Stücke'),
+    ('Packung'),
+    ('Packungen'),
+    ('Dose'),
+    ('Dosen'),
+    ('Flasche'),
+    ('Flaschen'),
+    ('g'),
+    ('kg'),
+    ('ml'),
+    ('l'),
+    ('kcal'),
+    ('TL'),
+    ('EL'),
+    ('Tasse'),
+    ('Tassen'),
+    ('Priese');
+
+
 CREATE TABLE IF NOT EXISTS grocery
 (
     id uuid NOT NULL PRIMARY KEY DEFAULT gen_random_uuid(),
