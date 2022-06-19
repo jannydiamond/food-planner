@@ -1,4 +1,4 @@
 export type SelectOption = {
-  readonly value: string
+  readonly value: string | null
   readonly label: string
 }

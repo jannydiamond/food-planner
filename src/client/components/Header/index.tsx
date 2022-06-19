@@ -14,6 +14,9 @@ const Header = () => {
       <NavLink to="groceries">
         {({ isActive }) => <span>Groceries{isActive ? ' (active)' : ''}</span>}
       </NavLink>
+      <NavLink to="settings">
+        {({ isActive }) => <span>Settings{isActive ? ' (active)' : ''}</span>}
+      </NavLink>
     </header>
   )
 }

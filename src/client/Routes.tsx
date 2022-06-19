@@ -13,6 +13,8 @@ import HouseholdDetails from './Pages/HouseholdDetails'
 import Header from './components/Header'
 import Groceries from './Pages/Groceries'
 import GroceryDetails from './Pages/GroceryDetails'
+import Settings from './Pages/Settings'
+import Units from './Pages/Settings/Units'
 
 const Routes = () => {
   return (
@@ -35,6 +37,8 @@ const Routes = () => {
         <Route path="/households/:householdId" element={<HouseholdDetails />} />
         <Route path="/groceries" element={<Groceries />} />
         <Route path="/groceries/:groceryId" element={<GroceryDetails />} />
+        <Route path="/settings" element={<Settings />} />
+        <Route path="/settings/units" element={<Units />} />
       </Route>
     </ReactRouterRoutes>
   )

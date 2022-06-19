@@ -40,14 +40,14 @@ unitsRouter.post('/', verifyToken, async (req: Request, res: Response) => {
 })
 
 unitsRouter.put(
-  '/:unitName',
+  '/:unitId',
   verifyToken,
   async (req: Request, res: Response, next: NextFunction) => {
-    const { unitName } = req.params
+    const { unitId } = req.params
     const unit = req.body
     const currentUser = (req as RequestWithUser).user.user
 
-    const unitToUpdate = await db.units.findByName(unitName)
+    const unitToUpdate = await db.units.findById(parseInt(unitId))
 
     if (!unitToUpdate) {
       res.statusCode = 400

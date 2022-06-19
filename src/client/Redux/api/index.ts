@@ -19,6 +19,6 @@ export const foodplannerApi = createApi({
     },
     credentials: 'include',
   }),
-  tagTypes: ['User', 'Household', 'UserOfHousehold', 'Grocery'],
+  tagTypes: ['User', 'Household', 'UserOfHousehold', 'Grocery', 'Unit'],
   endpoints: () => ({}),
 })

@@ -24,29 +24,34 @@ export class UnitsRepository {
         i.e. only once, as a singleton.
       */
 
-    this.updateColumnSet = new pgp.helpers.ColumnSet([
-      '?id',
+    this.updateColumnSet = new pgp.helpers.ColumnSet(
+      [
+        '?id',
+        {
+          name: 'unit_name',
+          skip: (col) => !col.exists,
+        },
+        {
+          name: 'created_by',
+          skip: true,
+        },
+        {
+          name: 'created_at',
+          skip: true,
+        },
+        {
+          name: 'updated_by',
+          skip: (col) => !col.exists,
+        },
+        {
+          name: 'updated_at',
+          init: () => new Date(),
+        },
+      ],
       {
-        name: 'unit_name',
-        skip: (col) => !col.exists,
-      },
-      {
-        name: 'created_by',
-        skip: true,
-      },
-      {
-        name: 'created_at',
-        skip: true,
-      },
-      {
-        name: 'updated_by',
-        skip: (col) => !col.exists,
-      },
-      {
-        name: 'updated_at',
-        init: () => new Date(),
-      },
-    ])
+        table: 'unit',
+      }
+    )
   }
 
   // Removes all records from the table
