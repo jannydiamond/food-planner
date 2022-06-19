@@ -3,8 +3,7 @@ import { SelectOption } from 'client/types'
 import { Grocery, Unit } from 'model/types'
 import React, { useCallback, useEffect, useState } from 'react'
 import { Controller, FieldError, useForm } from 'react-hook-form'
-import Creatable from 'react-select/creatable'
-import { OnChangeValue } from 'react-select'
+import Select, { OnChangeValue } from 'react-select'
 import { useGetAllUnitsQuery } from 'client/Redux/api/units'
 
 type Props = {
@@ -82,7 +81,7 @@ const EditForm = ({ grocery, finished }: Props) => {
         }
       })
 
-      setUnitOptions(options)
+      setUnitOptions([{ value: null, label: 'No Unit' }, ...options])
     }
   }, [units])
 
@@ -145,10 +144,10 @@ const EditForm = ({ grocery, finished }: Props) => {
             name="base_unit"
             control={control}
             render={({ field }) => (
-              <Creatable
+              <Select
                 {...field}
                 id="base_unit"
-                isClearable
+                isSearchable
                 options={unitOptions}
                 value={baseUnitValue}
                 defaultValue={baseUnitValue}
@@ -178,10 +177,10 @@ const EditForm = ({ grocery, finished }: Props) => {
             name="alt_unit"
             control={control}
             render={({ field }) => (
-              <Creatable
+              <Select
                 {...field}
                 id="alt_unit"
-                isClearable
+                isSearchable
                 options={unitOptions}
                 value={altUnitValue}
                 defaultValue={altUnitValue}

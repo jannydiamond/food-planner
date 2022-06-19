@@ -3,8 +3,7 @@ import { useGetAllUnitsQuery } from 'client/Redux/api/units'
 import { Grocery, Unit } from 'model/types'
 import React, { useCallback, useEffect, useState } from 'react'
 import { Controller, FieldError, useForm } from 'react-hook-form'
-import Creatable from 'react-select/creatable'
-import { OnChangeValue } from 'react-select'
+import Select, { OnChangeValue } from 'react-select'
 import { SelectOption } from 'client/types'
 
 type AddGroceryFormData = {
@@ -74,7 +73,7 @@ const AddForm = () => {
         }
       })
 
-      setUnitOptions(options)
+      setUnitOptions([{ value: null, label: 'No Unit' }, ...options])
     }
   }, [units])
 
@@ -106,12 +105,13 @@ const AddForm = () => {
             name="base_unit"
             control={control}
             render={({ field }) => (
-              <Creatable
+              <Select
                 {...field}
                 id="base_unit"
-                isClearable
+                isSearchable
                 options={unitOptions}
                 value={baseUnitValue}
+                defaultValue={null}
                 isDisabled={isLoadingUnits}
                 isLoading={isLoadingUnits}
                 onChange={handleBaseUnitChange}
@@ -134,12 +134,13 @@ const AddForm = () => {
             name="alt_unit"
             control={control}
             render={({ field }) => (
-              <Creatable
+              <Select
                 {...field}
                 id="alt_unit"
-                isClearable
+                isSearchable
                 options={unitOptions}
                 value={altUnitValue}
+                defaultValue={null}
                 isDisabled={isLoadingUnits}
                 isLoading={isLoadingUnits}
                 onChange={handleAltUnitChange}
