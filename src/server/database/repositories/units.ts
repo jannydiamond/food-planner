@@ -1,9 +1,14 @@
-import { IDatabase, IMain } from 'pg-promise'
+import { ColumnSet, IDatabase, IMain } from 'pg-promise'
 import { IResult } from 'pg-promise/typescript/pg-subset'
 import { Unit } from '../../../model/types'
 import { units as sql } from '../sql'
 
 export class UnitsRepository {
+  /**
+   * Column set used for updates
+   */
+  private updateColumnSet: ColumnSet
+
   /**
    * @param db
    * Automated database connection context/interface.
@@ -18,6 +23,30 @@ export class UnitsRepository {
         you should create it conditionally, inside the constructor,
         i.e. only once, as a singleton.
       */
+
+    this.updateColumnSet = new pgp.helpers.ColumnSet([
+      '?id',
+      {
+        name: 'unit_name',
+        skip: (col) => !col.exists,
+      },
+      {
+        name: 'created_by',
+        skip: true,
+      },
+      {
+        name: 'created_at',
+        skip: true,
+      },
+      {
+        name: 'updated_by',
+        skip: (col) => !col.exists,
+      },
+      {
+        name: 'updated_at',
+        init: () => new Date(),
+      },
+    ])
   }
 
   // Removes all records from the table
@@ -30,7 +59,16 @@ export class UnitsRepository {
     return this.db.one(sql.add, unit)
   }
 
-  //TODO Update
+  async update(unit: Unit): Promise<null> {
+    const condition = this.pgp.as.format(' WHERE id = $<id>', {
+      id: unit.id,
+    })
+
+    const query =
+      this.pgp.helpers.update(unit, this.updateColumnSet) + condition
+
+    return this.db.none(query)
+  }
 
   // Tries to delete a unit by id, and returns the number of records deleted
   async remove(id: number): Promise<number> {

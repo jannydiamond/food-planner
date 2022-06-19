@@ -1,11 +1,8 @@
 import express, { NextFunction, Request, Response } from 'express'
-import pgPromise from 'pg-promise'
-import { FpUser, Grocery } from '../../model/types'
+import { Grocery } from '../../model/types'
 import { verifyToken } from '../auth'
 import { db } from '../database'
-import { IExtensions } from '../database/repositories'
 import { RequestWithUser } from '../types'
-import addUnitIfNotExists from './utils/addUnitIfNotExists'
 
 const groceriesRouter = express.Router()
 
@@ -25,29 +22,6 @@ groceriesRouter.get('/', verifyToken, async (_req: Request, res: Response) => {
   }
 })
 
-const handleUnitsForGroceries = (
-  t: pgPromise.ITask<IExtensions> & IExtensions,
-  grocery: Grocery | Omit<Grocery, 'id' | 'updated_at'>,
-  currentUser: FpUser
-) => {
-  if (!grocery.base_unit && !grocery.alt_unit) return
-
-  if (grocery.base_unit && grocery.alt_unit) {
-    const baseUnit = addUnitIfNotExists(grocery.base_unit, currentUser.username)
-    const altUnit = addUnitIfNotExists(grocery.alt_unit, currentUser.username)
-
-    return t.batch([baseUnit, altUnit])
-  }
-
-  if (grocery.base_unit) {
-    return addUnitIfNotExists(grocery.base_unit, currentUser.username)
-  }
-
-  if (grocery.alt_unit) {
-    return addUnitIfNotExists(grocery.alt_unit, currentUser.username)
-  }
-}
-
 groceriesRouter.post(
   '/',
   verifyToken,
@@ -65,23 +39,11 @@ groceriesRouter.post(
     const currentUser = (req as RequestWithUser).user.user
 
     try {
-      await db
-        .tx('tx-add-grocery', async (t) => {
-          await handleUnitsForGroceries(t, grocery, currentUser)
-        })
-        .then(async () => {
-          const data = await db.groceries.add({
-            ...grocery,
-            created_by: currentUser.username,
-          })
-          res.status(200).json(data)
-        })
-        .catch((error: any) => {
-          res.json({
-            success: false,
-            error: error.message || error,
-          })
-        })
+      const data = await db.groceries.add({
+        ...grocery,
+        created_by: currentUser.username,
+      })
+      res.status(200).json(data)
     } catch (error: any) {
       res.json({
         success: false,
@@ -97,6 +59,7 @@ groceriesRouter.put(
   async (req: Request, res: Response, next: NextFunction) => {
     const { groceryId } = req.params
     const grocery = req.body
+    const currentUser = (req as RequestWithUser).user.user
 
     const groceryToUpdate = await db.groceries.findById(groceryId)
 
@@ -106,27 +69,14 @@ groceriesRouter.put(
       return next()
     }
 
-    const currentUser = (req as RequestWithUser).user.user
-
     try {
-      await db
-        .tx('tx-update-grocery', async (t) => {
-          await handleUnitsForGroceries(t, grocery, currentUser)
-        })
-        .then(async () => {
-          await db.groceries.update({
-            ...groceryToUpdate,
-            ...grocery,
-          })
+      await db.groceries.update({
+        ...groceryToUpdate,
+        ...grocery,
+        updated_by: currentUser.username,
+      })
 
-          res.status(200).json('Grocery successfully updated!')
-        })
-        .catch((error: any) => {
-          res.json({
-            success: false,
-            error: error.message || error,
-          })
-        })
+      res.status(200).json('Grocery successfully updated!')
     } catch (error: any) {
       res.json({
         success: false,

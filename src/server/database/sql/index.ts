@@ -40,7 +40,6 @@ export const households = {
 
 export const groceries = {
   empty: sql('groceries/empty.sql'),
-  add: sql('groceries/add.sql'),
   remove: sql('groceries/remove.sql'),
   selectAll: sql('groceries/selectAll.sql'),
   findById: sql('groceries/findById.sql'),
