@@ -7,6 +7,7 @@ import {
   GroceriesRepository,
   UnitsRepository,
   HouseholdsRepository,
+  InventoriesRepository,
 } from './repositories'
 import { Diagnostics } from './diagnostics'
 
@@ -31,6 +32,7 @@ const initOptions: IInitOptions<IExtensions> = {
     obj.households = new HouseholdsRepository(obj, pgp)
     obj.groceries = new GroceriesRepository(obj, pgp)
     obj.units = new UnitsRepository(obj, pgp)
+    obj.inventories = new InventoriesRepository(obj, pgp)
   },
 }
 

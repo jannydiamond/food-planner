@@ -2,6 +2,7 @@ import { FpUsersRepository } from './users'
 import { GroceriesRepository } from './groceries'
 import { UnitsRepository } from './units'
 import { HouseholdsRepository } from './households'
+import { InventoriesRepository } from './inventories'
 
 // Database Interface Extensions:
 export interface IExtensions {
@@ -9,6 +10,7 @@ export interface IExtensions {
   households: HouseholdsRepository
   groceries: GroceriesRepository
   units: UnitsRepository
+  inventories: InventoriesRepository
 }
 
 export {
@@ -16,4 +18,5 @@ export {
   HouseholdsRepository,
   GroceriesRepository,
   UnitsRepository,
+  InventoriesRepository,
 }
