@@ -54,3 +54,15 @@ export const units = {
   findById: sql('units/findById.sql'),
   findByName: sql('units/findByName.sql'),
 }
+
+export const inventories = {
+  empty: sql('inventories/empty.sql'),
+  remove: sql('inventories/remove.sql'),
+  removeGroceryFromInventory: sql('inventories/removeGroceryFromInventory.sql'),
+  selectAll: sql('inventories/selectAll.sql'),
+  selectAllGroceries: sql('inventories/selectAllGroceries.sql'),
+  findById: sql('inventories/findById.sql'),
+  findInventoryHasGroceryItemById: sql(
+    'inventories/findInventoryHasGroceryItemById.sql'
+  ),
+}
