@@ -3,6 +3,7 @@ import { GroceriesRepository } from './groceries'
 import { UnitsRepository } from './units'
 import { HouseholdsRepository } from './households'
 import { InventoriesRepository } from './inventories'
+import { ShoppingListsRepository } from './shoppingLists'
 
 // Database Interface Extensions:
 export interface IExtensions {
@@ -11,6 +12,7 @@ export interface IExtensions {
   groceries: GroceriesRepository
   units: UnitsRepository
   inventories: InventoriesRepository
+  shoppingLists: ShoppingListsRepository
 }
 
 export {
@@ -19,4 +21,5 @@ export {
   GroceriesRepository,
   UnitsRepository,
   InventoriesRepository,
+  ShoppingListsRepository,
 }
