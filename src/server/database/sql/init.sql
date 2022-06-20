@@ -115,6 +115,7 @@ CREATE TABLE IF NOT EXISTS shopping_list_has_grocery
     grocery_id uuid NOT NULL references grocery(id) ON DELETE CASCADE,
     amount int,
     unit text references unit(unit_name),
+    in_basket boolean NOT NULL DEFAULT false,
     added_by text references fp_user(username),
     added_at timestamp DEFAULT NOW(),
     updated_by text references fp_user(username),
