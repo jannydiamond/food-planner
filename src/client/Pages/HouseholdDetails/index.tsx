@@ -3,7 +3,7 @@ import {
   useGetHouseholdByIdQuery,
 } from 'client/Redux/api/households'
 import React, { useCallback, useState } from 'react'
-import { Link, useNavigate, useParams } from 'react-router-dom'
+import { Link, NavLink, useNavigate, useParams } from 'react-router-dom'
 import EditForm from './EditForm'
 import HouseholdUsers from './HouseholdUsers'
 
@@ -40,6 +40,16 @@ const HouseholdDetails = () => {
         <>
           <h1>Household: {household_name}</h1>
           <Link to={'/'}>Zurück</Link>
+          <br />
+          <br />
+          <nav>
+            <NavLink to="inventories">
+              {({ isActive }) => (
+                <span>Inventories{isActive ? ' (active)' : ''}</span>
+              )}
+            </NavLink>
+          </nav>
+
           <p>Created by: {created_by}</p>
           <p>
             <button onClick={toggleEditHousehold}>Edit</button>

@@ -24,8 +24,6 @@ const EditForm = ({ unit, finished }: Props) => {
   const handleEditUnit = useCallback(
     async (data: EditUnitFormData) => {
       const { unit_name } = data
-      console.log(unit)
-      console.log(unit_name)
 
       editUnit({
         ...unit,
