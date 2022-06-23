@@ -27,6 +27,8 @@ export const foodplannerApi = createApi({
     'Unit',
     'Inventory',
     'GroceryInInventory',
+    'ShoppingList',
+    'GroceryInShoppingList',
   ],
   endpoints: () => ({}),
 })

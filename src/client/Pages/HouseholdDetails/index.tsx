@@ -48,6 +48,11 @@ const HouseholdDetails = () => {
                 <span>Inventories{isActive ? ' (active)' : ''}</span>
               )}
             </NavLink>
+            <NavLink to="shopping-lists">
+              {({ isActive }) => (
+                <span>Shopping lists{isActive ? ' (active)' : ''}</span>
+              )}
+            </NavLink>
           </nav>
 
           <p>Created by: {created_by}</p>

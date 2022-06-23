@@ -17,6 +17,8 @@ import Settings from './Pages/Settings'
 import Units from './Pages/Settings/Units'
 import Inventories from './Pages/Inventories'
 import InventoryDetails from './Pages/InventoryDetails'
+import ShoppingLists from './Pages/ShoppingLists'
+import ShoppingListDetails from './Pages/ShoppingListDetails'
 
 const Routes = () => {
   return (
@@ -44,6 +46,14 @@ const Routes = () => {
         <Route
           path="/households/:householdId/inventories/:inventoryId"
           element={<InventoryDetails />}
+        />
+        <Route
+          path="/households/:householdId/shopping-lists"
+          element={<ShoppingLists />}
+        />
+        <Route
+          path="/households/:householdId/shopping-lists/:shoppingListId"
+          element={<ShoppingListDetails />}
         />
         <Route path="/groceries" element={<Groceries />} />
         <Route path="/groceries/:groceryId" element={<GroceryDetails />} />
