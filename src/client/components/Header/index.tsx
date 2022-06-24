@@ -1,23 +1,19 @@
 import React from 'react'
-import { NavLink } from 'react-router-dom'
 
-import LogoutButton from 'client/components/Buttons/LogoutButton'
+import HeaderWrapper from './__styled__/HeaderWrapper'
+import Logo from './Logo'
+import Navigation from './Navigation'
+import LogoutButton from './LogoutButton'
 
 const Header = () => {
   return (
-    <header>
-      <NavLink to={'/'}>Foodplanner</NavLink>
+    <HeaderWrapper>
+      <Logo />
+
+      <Navigation />
+
       <LogoutButton />
-      <NavLink to="households">
-        {({ isActive }) => <span>Households{isActive ? ' (active)' : ''}</span>}
-      </NavLink>
-      <NavLink to="groceries">
-        {({ isActive }) => <span>Groceries{isActive ? ' (active)' : ''}</span>}
-      </NavLink>
-      <NavLink to="settings">
-        {({ isActive }) => <span>Settings{isActive ? ' (active)' : ''}</span>}
-      </NavLink>
-    </header>
+    </HeaderWrapper>
   )
 }
 

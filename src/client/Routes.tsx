@@ -19,6 +19,8 @@ import Inventories from './Pages/Inventories'
 import InventoryDetails from './Pages/InventoryDetails'
 import ShoppingLists from './Pages/ShoppingLists'
 import ShoppingListDetails from './Pages/ShoppingListDetails'
+import HeaderHouseholds from './components/HeaderHouseholds'
+import Main from './components/__styled__/Main'
 
 const Routes = () => {
   return (
@@ -31,30 +33,38 @@ const Routes = () => {
           <PrivateRoute>
             <>
               <Header />
-              <Outlet />
+              <Main>
+                <Outlet />
+              </Main>
             </>
           </PrivateRoute>
         }
       >
         <Route path="/" element={<Navigate to="/households" replace />} />
         <Route path="/households" element={<Households />} />
-        <Route path="/households/:householdId" element={<HouseholdDetails />} />
+
         <Route
-          path="/households/:householdId/inventories"
-          element={<Inventories />}
-        />
-        <Route
-          path="/households/:householdId/inventories/:inventoryId"
-          element={<InventoryDetails />}
-        />
-        <Route
-          path="/households/:householdId/shopping-lists"
-          element={<ShoppingLists />}
-        />
-        <Route
-          path="/households/:householdId/shopping-lists/:shoppingListId"
-          element={<ShoppingListDetails />}
-        />
+          path="/households/:householdId"
+          element={
+            <>
+              <HeaderHouseholds />
+              <Outlet />
+            </>
+          }
+        >
+          <Route path="details" element={<HouseholdDetails />} />
+          <Route path="inventories" element={<Inventories />} />
+          <Route
+            path="inventories/:inventoryId"
+            element={<InventoryDetails />}
+          />
+          <Route path="shopping-lists" element={<ShoppingLists />} />
+          <Route
+            path="shopping-lists/:shoppingListId"
+            element={<ShoppingListDetails />}
+          />
+        </Route>
+
         <Route path="/groceries" element={<Groceries />} />
         <Route path="/groceries/:groceryId" element={<GroceryDetails />} />
         <Route path="/settings" element={<Settings />} />
