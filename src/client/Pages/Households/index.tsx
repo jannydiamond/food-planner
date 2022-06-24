@@ -27,7 +27,7 @@ const Households = () => {
               <b>{household.household_name}</b>{' '}
               <button
                 onClick={() =>
-                  navigate(`/households/${household.id}`, {
+                  navigate(`/households/${household.id}/details`, {
                     replace: true,
                   })
                 }

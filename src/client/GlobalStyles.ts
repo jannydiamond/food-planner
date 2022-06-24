@@ -25,10 +25,10 @@ const GlobalStyle = createGlobalStyle`
   }
 
   a {
-    color: #16a085;
+    color: #0fbcf9;
 
     &:hover {
-      color: #1abc9c;
+      color: #4bcffa;
     }
   }
 `
