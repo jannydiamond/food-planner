@@ -43,7 +43,7 @@ export const unitsApi = foodplannerApi.injectEndpoints({
       ],
     }),
     // TODO: Include unit name in result msg
-    deleteUnit: builder.mutation<string, string>({
+    deleteUnit: builder.mutation<string, number>({
       query: (id) => ({
         url: `units/${id}`,
         method: 'DELETE',
