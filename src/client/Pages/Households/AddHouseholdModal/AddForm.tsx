@@ -6,7 +6,11 @@ type AddHouseholdFormData = {
   household_name: string
 }
 
-const AddForm = () => {
+type Props = {
+  closeModal: () => void
+}
+
+const AddForm = ({ closeModal }: Props) => {
   const {
     register,
     handleSubmit,
@@ -18,12 +22,13 @@ const AddForm = () => {
   const handleAddHousehold = useCallback(
     async (data: AddHouseholdFormData) => {
       addHousehold(data)
+      closeModal()
     },
-    [addHousehold]
+    [addHousehold, closeModal]
   )
 
   return (
-    <form onSubmit={handleSubmit(handleAddHousehold)}>
+    <form id="addHousehold" onSubmit={handleSubmit(handleAddHousehold)}>
       <fieldset>
         <legend>Add household</legend>
         {error && <p>Something went wrong!</p>}
@@ -37,7 +42,6 @@ const AddForm = () => {
           />
         </label>
         {errors.household_name && <p>{errors.household_name.message}</p>}
-        <input type="submit" />
         {isLoading && <p>Loading...</p>}
       </fieldset>
     </form>
