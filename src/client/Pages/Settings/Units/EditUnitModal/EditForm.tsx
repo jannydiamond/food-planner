@@ -1,52 +1,61 @@
-import { usePostUnitMutation } from 'client/Redux/api/units'
+import { usePutUnitMutation } from 'client/Redux/api/units'
+import { Unit } from 'model/types'
 import React, { useCallback } from 'react'
 import { useForm } from 'react-hook-form'
 
-type AddUnitFormData = {
+type Props = {
+  unit: Unit
+  closeModal: () => void
+}
+
+type EditUnitFormData = {
   unit_name: string
 }
 
-const AddForm = () => {
+const EditForm = ({ unit, closeModal }: Props) => {
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<AddUnitFormData>()
+  } = useForm<EditUnitFormData>()
 
-  const [addUnit, { isLoading, error }] = usePostUnitMutation()
+  const [editUnit, { isLoading, error }] = usePutUnitMutation()
 
-  const handleAddUnit = useCallback(
-    async (data: AddUnitFormData) => {
+  const handleEditUnit = useCallback(
+    async (data: EditUnitFormData) => {
       const { unit_name } = data
 
-      addUnit({
+      editUnit({
+        ...unit,
         unit_name,
       })
+
+      closeModal()
     },
-    [addUnit]
+
+    [editUnit, unit, closeModal]
   )
 
   return (
-    <form onSubmit={handleSubmit(handleAddUnit)}>
+    <form id="editUnit" onSubmit={handleSubmit(handleEditUnit)}>
       <fieldset>
-        <legend>Add unit</legend>
+        <legend>Edit unit</legend>
         {error && <p>Something went wrong!</p>}
         <label htmlFor="unit_name">
           <p>Unit name</p>
           <input
             type="text"
+            defaultValue={unit.unit_name}
             {...register('unit_name', {
               required: 'Unit name is required!',
             })}
           />
         </label>
         {errors.unit_name && <p>{errors.unit_name.message}</p>}
-
-        <input type="submit" />
         {isLoading && <p>Loading...</p>}
       </fieldset>
     </form>
   )
 }
 
-export default React.memo(AddForm)
+export default React.memo(EditForm)
