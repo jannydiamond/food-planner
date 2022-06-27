@@ -1,12 +1,17 @@
-import { usePostGroceryMutation } from 'client/Redux/api/groceries'
-import { useGetAllUnitsQuery } from 'client/Redux/api/units'
+import { usePutGroceryMutation } from 'client/Redux/api/groceries'
+import { SelectOption } from 'client/types'
 import { Grocery, Unit } from 'model/types'
 import React, { useCallback, useEffect, useState } from 'react'
 import { Controller, FieldError, useForm } from 'react-hook-form'
 import Select, { OnChangeValue } from 'react-select'
-import { SelectOption } from 'client/types'
+import { useGetAllUnitsQuery } from 'client/Redux/api/units'
 
-type AddGroceryFormData = {
+type Props = {
+  grocery: Grocery
+  closeModal: () => void
+}
+
+type EditGroceryFormData = {
   grocery_name: string
   base_amount?: string | null
   base_unit?: string | null
@@ -14,26 +19,28 @@ type AddGroceryFormData = {
   alt_unit?: string | null
 }
 
-const AddForm = () => {
+const EditForm = ({ grocery, closeModal }: Props) => {
   const {
     register,
     handleSubmit,
     formState: { errors },
     control,
-  } = useForm<AddGroceryFormData>()
+  } = useForm<EditGroceryFormData>()
+
+  const [editGrocery, { isLoading, error }] = usePutGroceryMutation()
+
+  const { data: units, isLoading: isLoadingUnits } = useGetAllUnitsQuery()
 
   const [unitOptions, setUnitOptions] = useState<[] | SelectOption[]>([])
   const [baseUnitValue, setBaseUnitValue] = useState<null | SelectOption>(null)
   const [altUnitValue, setAltUnitValue] = useState<null | SelectOption>(null)
 
-  const [addGrocery, { isLoading, error }] = usePostGroceryMutation()
-
-  const { data: units, isLoading: isLoadingUnits } = useGetAllUnitsQuery()
-
-  const handleAddGrocery = useCallback(
-    async (data: AddGroceryFormData) => {
+  const handleEditGrocery = useCallback(
+    async (data: EditGroceryFormData) => {
       const { grocery_name, base_amount, alt_amount } = data
-      const newGrocery: Omit<Grocery, 'id' | 'created_by' | 'updated_at'> = {
+
+      editGrocery({
+        ...grocery,
         grocery_name,
         base_amount:
           base_amount && base_amount !== '' ? parseInt(base_amount) : null,
@@ -41,11 +48,12 @@ const AddForm = () => {
         alt_amount:
           alt_amount && alt_amount !== '' ? parseInt(alt_amount) : null,
         alt_unit: altUnitValue ? altUnitValue.value : null,
-      }
+      })
 
-      addGrocery(newGrocery)
+      closeModal()
     },
-    [addGrocery, altUnitValue, baseUnitValue]
+
+    [editGrocery, grocery, baseUnitValue, altUnitValue, closeModal]
   )
 
   const handleBaseUnitChange = (
@@ -66,7 +74,7 @@ const AddForm = () => {
 
   useEffect(() => {
     if (units) {
-      const options: SelectOption[] = units.map((unit: Unit) => {
+      const options = units.map((unit: Unit) => {
         return {
           value: unit.unit_name,
           label: unit.unit_name,
@@ -77,15 +85,42 @@ const AddForm = () => {
     }
   }, [units])
 
+  useEffect(() => {
+    if (units && grocery.base_unit) {
+      const selectedBaseUnit =
+        units.find((unit) => unit.unit_name === grocery.base_unit) ?? null
+
+      selectedBaseUnit &&
+        setBaseUnitValue({
+          value: selectedBaseUnit.unit_name,
+          label: selectedBaseUnit.unit_name,
+        })
+    }
+  }, [grocery.base_unit, units])
+
+  useEffect(() => {
+    if (units && grocery.alt_unit) {
+      const selectedAltUnit =
+        units.find((unit) => unit.unit_name === grocery.alt_unit) ?? null
+
+      selectedAltUnit &&
+        setAltUnitValue({
+          value: selectedAltUnit.unit_name,
+          label: selectedAltUnit.unit_name,
+        })
+    }
+  }, [grocery.alt_unit, units])
+
   return (
-    <form onSubmit={handleSubmit(handleAddGrocery)}>
+    <form id="editGrocery" onSubmit={handleSubmit(handleEditGrocery)}>
       <fieldset>
-        <legend>Add grocery</legend>
+        <legend>Edit grocery</legend>
         {error && <p>Something went wrong!</p>}
         <label htmlFor="grocery_name">
           <p>Grocery name</p>
           <input
             type="text"
+            defaultValue={grocery.grocery_name}
             {...register('grocery_name', {
               required: 'Grocery name is required!',
             })}
@@ -95,7 +130,11 @@ const AddForm = () => {
 
         <label htmlFor="base_amount">
           <p>Base amount</p>
-          <input type="number" {...register('base_amount')} />
+          <input
+            type="number"
+            defaultValue={grocery.base_amount?.toString()}
+            {...register('base_amount')}
+          />
         </label>
         {errors.base_amount && <p>{errors.base_amount.message}</p>}
 
@@ -111,7 +150,7 @@ const AddForm = () => {
                 isSearchable
                 options={unitOptions}
                 value={baseUnitValue}
-                defaultValue={null}
+                defaultValue={baseUnitValue}
                 isDisabled={isLoadingUnits}
                 isLoading={isLoadingUnits}
                 onChange={handleBaseUnitChange}
@@ -124,7 +163,11 @@ const AddForm = () => {
 
         <label htmlFor="alt_amount">
           <p>Alternative amount</p>
-          <input type="number" {...register('alt_amount')} />
+          <input
+            type="number"
+            defaultValue={grocery.alt_amount?.toString()}
+            {...register('alt_amount')}
+          />
         </label>
         {errors.alt_amount && <p>{errors.alt_amount.message}</p>}
 
@@ -140,7 +183,7 @@ const AddForm = () => {
                 isSearchable
                 options={unitOptions}
                 value={altUnitValue}
-                defaultValue={null}
+                defaultValue={altUnitValue}
                 isDisabled={isLoadingUnits}
                 isLoading={isLoadingUnits}
                 onChange={handleAltUnitChange}
@@ -151,11 +194,10 @@ const AddForm = () => {
         </label>
         {errors.alt_unit && <p>{(errors.alt_unit as FieldError).message}</p>}
 
-        <input type="submit" />
         {isLoading && <p>Loading...</p>}
       </fieldset>
     </form>
   )
 }
 
-export default React.memo(AddForm)
+export default React.memo(EditForm)

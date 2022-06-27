@@ -1,31 +1,19 @@
-import {
-  useDeleteGroceryMutation,
-  useGetGroceryByIdQuery,
-} from 'client/Redux/api/groceries'
-import React, { useCallback, useState } from 'react'
-import { Link, useNavigate, useParams } from 'react-router-dom'
-import EditForm from './EditForm'
+import { useModal } from 'client/hooks/useModal'
+import { useGetGroceryByIdQuery } from 'client/Redux/api/groceries'
+import React from 'react'
+import { Link, useParams } from 'react-router-dom'
+import DeleteGroceryModal from './DeleteGroceryModal'
+import EditGroceryModal from './EditGroceryModal'
 
 const GroceryDetails = () => {
   const { groceryId } = useParams() as { groceryId: string }
-  const navigate = useNavigate()
-  const [isEditing, setIsEditing] = useState<boolean>(false)
+
+  const editGroceryModal = useModal()
+  const deleteGroceryModal = useModal()
 
   const { data: grocery, isLoading } = useGetGroceryByIdQuery(groceryId, {
     refetchOnMountOrArgChange: true,
   })
-
-  const toggleEditGrocery = () => setIsEditing(!isEditing)
-
-  const [
-    deleteGrocery,
-    { isLoading: isLoadingDeleteGrocery, error: errorDeleteGrocery },
-  ] = useDeleteGroceryMutation()
-
-  const handleDeleteGrocery = useCallback(async () => {
-    deleteGrocery(groceryId)
-    navigate('/groceries', { replace: true })
-  }, [deleteGrocery, groceryId, navigate])
 
   if (!grocery) return null
 
@@ -37,21 +25,15 @@ const GroceryDetails = () => {
         <p>Loading...</p>
       ) : (
         <>
-          <h1>Grocery: {grocery_name}</h1>
+          <h1>{grocery_name}</h1>
           <Link to={'/groceries'}>Zurück</Link>
           <p>Created by: {created_by}</p>
           <p>
-            <button onClick={toggleEditGrocery}>Edit</button>
-            <button onClick={handleDeleteGrocery}>Delete</button>
+            <button onClick={editGroceryModal.show}>Edit</button>
+            <button onClick={deleteGroceryModal.show}>Delete</button>
           </p>
-          {isEditing && (
-            <EditForm grocery={grocery} finished={() => setIsEditing(false)} />
-          )}
-
-          <p>
-            {errorDeleteGrocery && <p>Something went wrong!</p>}
-            {isLoadingDeleteGrocery && <p>Loading...</p>}
-          </p>
+          <EditGroceryModal grocery={grocery} modal={editGroceryModal} />
+          <DeleteGroceryModal grocery={grocery} modal={deleteGroceryModal} />
         </>
       )}
     </>
