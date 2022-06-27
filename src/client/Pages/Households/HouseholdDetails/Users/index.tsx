@@ -1,14 +1,24 @@
+import { useModal } from 'client/hooks/useModal'
 import {
-  useDeleteUserFromHouseholdMutation,
   useGetAllUsersOfHouseholdQuery,
   useGetHouseholdByIdQuery,
 } from 'client/Redux/api/households'
-import React, { useCallback } from 'react'
-import { Link, useParams } from 'react-router-dom'
-import AddForm from './AddForm'
+import { FpUser } from 'model/types'
+import React, { useState } from 'react'
+import { useParams } from 'react-router-dom'
+import AddUserModal from './AddUserModal'
+import DeleteUserModal from './DeleteUserModal'
 
 const Users = () => {
   const { householdId } = useParams() as { householdId: string }
+
+  const addUserModal = useModal()
+  const deleteUserModal = useModal()
+
+  const [currentUser, setCurrentUser] = useState<Pick<
+    FpUser,
+    'id' | 'username'
+  > | null>(null)
 
   const { data: household, isLoading } = useGetHouseholdByIdQuery(householdId, {
     refetchOnMountOrArgChange: true,
@@ -18,14 +28,14 @@ const Users = () => {
     refetchOnMountOrArgChange: true,
   })
 
-  const [removeUserFromHousehold] = useDeleteUserFromHouseholdMutation()
+  const handleDeleteUser = (user_id: string) => {
+    const user = users?.find((user) => user.id === user_id) ?? null
 
-  const handleDeleteUser = useCallback(
-    async (user_id: string) => {
-      removeUserFromHousehold({ user_id, household_id: householdId })
-    },
-    [householdId, removeUserFromHousehold]
-  )
+    if (user) {
+      setCurrentUser(user)
+      deleteUserModal.show()
+    }
+  }
 
   if (!household) return null
 
@@ -38,8 +48,8 @@ const Users = () => {
       ) : (
         <>
           <h2>Users</h2>
-          <Link to={`/households/${householdId}`}>Zurück</Link>
-          <AddForm id={householdId} />
+          <button onClick={addUserModal.show}>Add</button>
+          <AddUserModal householdId={householdId} modal={addUserModal} />
           {users ? (
             <ul>
               {users.map((user) => {
@@ -58,6 +68,15 @@ const Users = () => {
           ) : (
             '-'
           )}
+        </>
+      )}
+      {currentUser && (
+        <>
+          <DeleteUserModal
+            household={household}
+            user={currentUser}
+            modal={deleteUserModal}
+          />
         </>
       )}
     </>

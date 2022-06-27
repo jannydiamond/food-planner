@@ -8,10 +8,11 @@ type AddUserFormData = {
 }
 
 type Props = {
-  id: string
+  householdId: string
+  closeModal: () => void
 }
 
-const AddForm = (props: Props) => {
+const AddForm = ({ closeModal, householdId }: Props) => {
   const {
     register,
     handleSubmit,
@@ -33,14 +34,16 @@ const AddForm = (props: Props) => {
 
       addUser({
         user_id: userToAdd.id,
-        household_id: props.id,
+        household_id: householdId,
       })
+
+      closeModal()
     },
-    [addUser, props.id, users]
+    [addUser, closeModal, householdId, users]
   )
 
   return (
-    <form onSubmit={handleSubmit(handleAddUser)}>
+    <form id="addUser" onSubmit={handleSubmit(handleAddUser)}>
       <fieldset>
         <legend>Add user</legend>
         {error && <p>Something went wrong!</p>}
@@ -54,7 +57,6 @@ const AddForm = (props: Props) => {
           />
         </label>
         {errors.username && <p>{errors.username.message}</p>}
-        <input type="submit" />
         {isLoading && <p>Loading...</p>}
       </fieldset>
     </form>
