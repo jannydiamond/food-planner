@@ -5,7 +5,6 @@ import {
 import React, { useCallback, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import EditForm from './EditForm'
-import HouseholdUsers from './HouseholdUsers'
 
 const HouseholdDetails = () => {
   const { householdId } = useParams() as { householdId: string }
@@ -38,7 +37,7 @@ const HouseholdDetails = () => {
         <p>Loading...</p>
       ) : (
         <>
-          <h1>Household: {household_name}</h1>
+          <h1>{household_name}</h1>
           <Link to={'/'}>Zurück</Link>
           <p>Created by: {created_by}</p>
           <p>
@@ -56,7 +55,6 @@ const HouseholdDetails = () => {
             {errorDeleteHousehold && <p>Something went wrong!</p>}
             {isLoadingDeleteHousehold && <p>Loading...</p>}
           </p>
-          <HouseholdUsers householdId={householdId} />
         </>
       )}
     </>

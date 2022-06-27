@@ -1,33 +1,36 @@
-import { useGetInventoriesQuery } from 'client/Redux/api/inventories'
+import { useGetShoppingListsQuery } from 'client/Redux/api/shoppingLists'
 import React from 'react'
-import { Inventory } from 'model/types'
+import { ShoppingList } from 'model/types'
 import AddForm from './AddForm'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 
-const Inventories = () => {
+const ShoppingLists = () => {
   const { householdId } = useParams() as { householdId: string }
   const navigate = useNavigate()
 
-  const { data: inventories, isLoading } = useGetInventoriesQuery(householdId, {
-    refetchOnMountOrArgChange: true,
-  })
+  const { data: shoppingLists, isLoading } = useGetShoppingListsQuery(
+    householdId,
+    {
+      refetchOnMountOrArgChange: true,
+    }
+  )
 
   return (
     <div>
-      <h1>Inventories</h1>
+      <h2>Shopping lists</h2>
       <Link to={`/households/${householdId}`}>Zurück</Link>
       <AddForm householdId={householdId} />
       <h2>Listing</h2>
       {isLoading && <p>Loading...</p>}
-      {inventories && inventories.length > 0 && (
+      {shoppingLists && shoppingLists.length > 0 && (
         <ul>
-          {inventories.map((inventory: Inventory) => (
-            <li key={inventory.id}>
-              <b>{inventory.inventory_name}</b>{' '}
+          {shoppingLists.map((shoppingList: ShoppingList) => (
+            <li key={shoppingList.id}>
+              <b>{shoppingList.shopping_list_name}</b>{' '}
               <button
                 onClick={() =>
                   navigate(
-                    `/households/${householdId}/inventories/${inventory.id}`,
+                    `/households/${householdId}/shopping-lists/${shoppingList.id}`,
                     {
                       replace: true,
                     }
@@ -44,4 +47,4 @@ const Inventories = () => {
   )
 }
 
-export default React.memo(Inventories)
+export default React.memo(ShoppingLists)

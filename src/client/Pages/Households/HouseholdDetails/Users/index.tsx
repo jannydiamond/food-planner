@@ -4,13 +4,12 @@ import {
   useGetHouseholdByIdQuery,
 } from 'client/Redux/api/households'
 import React, { useCallback } from 'react'
+import { Link, useParams } from 'react-router-dom'
 import AddForm from './AddForm'
 
-type Props = {
-  householdId: string
-}
+const Users = () => {
+  const { householdId } = useParams() as { householdId: string }
 
-const HouseholdUsers = ({ householdId }: Props) => {
   const { data: household, isLoading } = useGetHouseholdByIdQuery(householdId, {
     refetchOnMountOrArgChange: true,
   })
@@ -39,6 +38,7 @@ const HouseholdUsers = ({ householdId }: Props) => {
       ) : (
         <>
           <h2>Users</h2>
+          <Link to={`/households/${householdId}`}>Zurück</Link>
           <AddForm id={householdId} />
           {users ? (
             <ul>
@@ -64,4 +64,4 @@ const HouseholdUsers = ({ householdId }: Props) => {
   )
 }
 
-export default React.memo(HouseholdUsers)
+export default React.memo(Users)
