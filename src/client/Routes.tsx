@@ -9,18 +9,19 @@ import Households from './Pages/Households'
 import Login from './Pages/Login'
 import Registration from './Pages/Registration'
 import PrivateRoute from './App/PrivateRoute'
-import HouseholdDetails from './Pages/HouseholdDetails'
+import HouseholdDetails from './Pages/Households/HouseholdDetails'
 import Header from './components/Header'
 import Groceries from './Pages/Groceries'
-import GroceryDetails from './Pages/GroceryDetails'
+import GroceryDetails from './Pages/Groceries/GroceryDetails'
 import Settings from './Pages/Settings'
 import Units from './Pages/Settings/Units'
-import Inventories from './Pages/Inventories'
-import InventoryDetails from './Pages/InventoryDetails'
-import ShoppingLists from './Pages/ShoppingLists'
-import ShoppingListDetails from './Pages/ShoppingListDetails'
+import Inventories from './Pages/Households/HouseholdDetails/Inventories'
+import InventoryDetails from './Pages/Households/HouseholdDetails/Inventories/InventoryDetails'
+import ShoppingLists from './Pages/Households/HouseholdDetails/ShoppingLists'
+import ShoppingListDetails from './Pages/Households/HouseholdDetails/ShoppingLists/ShoppingListDetails'
 import HeaderHouseholds from './components/HeaderHouseholds'
 import Main from './components/__styled__/Main'
+import Users from './Pages/Households/HouseholdDetails/Users'
 
 const Routes = () => {
   return (
@@ -47,12 +48,12 @@ const Routes = () => {
           path="/households/:householdId"
           element={
             <>
+              <HouseholdDetails />
               <HeaderHouseholds />
               <Outlet />
             </>
           }
         >
-          <Route path="details" element={<HouseholdDetails />} />
           <Route path="inventories" element={<Inventories />} />
           <Route
             path="inventories/:inventoryId"
@@ -63,6 +64,7 @@ const Routes = () => {
             path="shopping-lists/:shoppingListId"
             element={<ShoppingListDetails />}
           />
+          <Route path="users" element={<Users />} />
         </Route>
 
         <Route path="/groceries" element={<Groceries />} />

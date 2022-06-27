@@ -1,25 +1,12 @@
 import React from 'react'
-import { NavLink } from 'react-router-dom'
+import Navigation from './Navigation'
+import HeaderWrapper from './__styled__/HeaderWrapper'
 
 const HeaderHouseholds = () => {
   return (
-    <header>
-      <nav>
-        <NavLink to="details">
-          {({ isActive }) => <span>Details{isActive ? ' (active)' : ''}</span>}
-        </NavLink>
-        <NavLink to="inventories">
-          {({ isActive }) => (
-            <span>Inventories{isActive ? ' (active)' : ''}</span>
-          )}
-        </NavLink>
-        <NavLink to="shopping-lists">
-          {({ isActive }) => (
-            <span>Shopping lists{isActive ? ' (active)' : ''}</span>
-          )}
-        </NavLink>
-      </nav>
-    </header>
+    <HeaderWrapper>
+      <Navigation />
+    </HeaderWrapper>
   )
 }
 
