@@ -5,8 +5,9 @@ const Content = styled('div')`
   box-shadow: ${(props) => props.theme.modal.boxShadow};
   position: relative;
 
-  max-width: calc(100% - 48px);
+  max-width: calc(100% - 24px);
   max-height: 100vh;
+  width: 100%;
 
   @media (min-width: ${(props) => props.theme.mediaQuerys.desktop.minWidth}) {
     max-width: 737px;

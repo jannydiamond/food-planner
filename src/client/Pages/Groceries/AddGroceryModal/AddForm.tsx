@@ -1,17 +1,12 @@
-import { usePutGroceryMutation } from 'client/Redux/api/groceries'
-import { SelectOption } from 'client/types'
+import { usePostGroceryMutation } from 'client/Redux/api/groceries'
+import { useGetAllUnitsQuery } from 'client/Redux/api/units'
 import { Grocery, Unit } from 'model/types'
 import React, { useCallback, useEffect, useState } from 'react'
 import { Controller, FieldError, useForm } from 'react-hook-form'
 import Select, { OnChangeValue } from 'react-select'
-import { useGetAllUnitsQuery } from 'client/Redux/api/units'
+import { SelectOption } from 'client/types'
 
-type Props = {
-  grocery: Grocery
-  finished: () => void
-}
-
-type EditGroceryFormData = {
+type AddGroceryFormData = {
   grocery_name: string
   base_amount?: string | null
   base_unit?: string | null
@@ -19,28 +14,30 @@ type EditGroceryFormData = {
   alt_unit?: string | null
 }
 
-const EditForm = ({ grocery, finished }: Props) => {
+type Props = {
+  closeModal: () => void
+}
+
+const AddForm = ({ closeModal }: Props) => {
   const {
     register,
     handleSubmit,
     formState: { errors },
     control,
-  } = useForm<EditGroceryFormData>()
-
-  const [editGrocery, { isLoading, error }] = usePutGroceryMutation()
-
-  const { data: units, isLoading: isLoadingUnits } = useGetAllUnitsQuery()
+  } = useForm<AddGroceryFormData>()
 
   const [unitOptions, setUnitOptions] = useState<[] | SelectOption[]>([])
   const [baseUnitValue, setBaseUnitValue] = useState<null | SelectOption>(null)
   const [altUnitValue, setAltUnitValue] = useState<null | SelectOption>(null)
 
-  const handleEditGrocery = useCallback(
-    async (data: EditGroceryFormData) => {
-      const { grocery_name, base_amount, alt_amount } = data
+  const [addGrocery, { isLoading, error }] = usePostGroceryMutation()
 
-      editGrocery({
-        ...grocery,
+  const { data: units, isLoading: isLoadingUnits } = useGetAllUnitsQuery()
+
+  const handleAddGrocery = useCallback(
+    async (data: AddGroceryFormData) => {
+      const { grocery_name, base_amount, alt_amount } = data
+      const newGrocery: Omit<Grocery, 'id' | 'created_by' | 'updated_at'> = {
         grocery_name,
         base_amount:
           base_amount && base_amount !== '' ? parseInt(base_amount) : null,
@@ -48,12 +45,12 @@ const EditForm = ({ grocery, finished }: Props) => {
         alt_amount:
           alt_amount && alt_amount !== '' ? parseInt(alt_amount) : null,
         alt_unit: altUnitValue ? altUnitValue.value : null,
-      })
+      }
 
-      finished()
+      addGrocery(newGrocery)
+      closeModal()
     },
-
-    [editGrocery, grocery, baseUnitValue, altUnitValue, finished]
+    [addGrocery, altUnitValue, baseUnitValue, closeModal]
   )
 
   const handleBaseUnitChange = (
@@ -74,7 +71,7 @@ const EditForm = ({ grocery, finished }: Props) => {
 
   useEffect(() => {
     if (units) {
-      const options = units.map((unit: Unit) => {
+      const options: SelectOption[] = units.map((unit: Unit) => {
         return {
           value: unit.unit_name,
           label: unit.unit_name,
@@ -85,42 +82,15 @@ const EditForm = ({ grocery, finished }: Props) => {
     }
   }, [units])
 
-  useEffect(() => {
-    if (units && grocery.base_unit) {
-      const selectedBaseUnit =
-        units.find((unit) => unit.unit_name === grocery.base_unit) ?? null
-
-      selectedBaseUnit &&
-        setBaseUnitValue({
-          value: selectedBaseUnit.unit_name,
-          label: selectedBaseUnit.unit_name,
-        })
-    }
-  }, [grocery.base_unit, units])
-
-  useEffect(() => {
-    if (units && grocery.alt_unit) {
-      const selectedAltUnit =
-        units.find((unit) => unit.unit_name === grocery.alt_unit) ?? null
-
-      selectedAltUnit &&
-        setAltUnitValue({
-          value: selectedAltUnit.unit_name,
-          label: selectedAltUnit.unit_name,
-        })
-    }
-  }, [grocery.alt_unit, units])
-
   return (
-    <form onSubmit={handleSubmit(handleEditGrocery)}>
+    <form id="addGrocery" onSubmit={handleSubmit(handleAddGrocery)}>
       <fieldset>
-        <legend>Edit grocery</legend>
+        <legend>Add grocery</legend>
         {error && <p>Something went wrong!</p>}
         <label htmlFor="grocery_name">
           <p>Grocery name</p>
           <input
             type="text"
-            defaultValue={grocery.grocery_name}
             {...register('grocery_name', {
               required: 'Grocery name is required!',
             })}
@@ -130,11 +100,7 @@ const EditForm = ({ grocery, finished }: Props) => {
 
         <label htmlFor="base_amount">
           <p>Base amount</p>
-          <input
-            type="number"
-            defaultValue={grocery.base_amount?.toString()}
-            {...register('base_amount')}
-          />
+          <input type="number" {...register('base_amount')} />
         </label>
         {errors.base_amount && <p>{errors.base_amount.message}</p>}
 
@@ -150,7 +116,7 @@ const EditForm = ({ grocery, finished }: Props) => {
                 isSearchable
                 options={unitOptions}
                 value={baseUnitValue}
-                defaultValue={baseUnitValue}
+                defaultValue={null}
                 isDisabled={isLoadingUnits}
                 isLoading={isLoadingUnits}
                 onChange={handleBaseUnitChange}
@@ -163,11 +129,7 @@ const EditForm = ({ grocery, finished }: Props) => {
 
         <label htmlFor="alt_amount">
           <p>Alternative amount</p>
-          <input
-            type="number"
-            defaultValue={grocery.alt_amount?.toString()}
-            {...register('alt_amount')}
-          />
+          <input type="number" {...register('alt_amount')} />
         </label>
         {errors.alt_amount && <p>{errors.alt_amount.message}</p>}
 
@@ -183,7 +145,7 @@ const EditForm = ({ grocery, finished }: Props) => {
                 isSearchable
                 options={unitOptions}
                 value={altUnitValue}
-                defaultValue={altUnitValue}
+                defaultValue={null}
                 isDisabled={isLoadingUnits}
                 isLoading={isLoadingUnits}
                 onChange={handleAltUnitChange}
@@ -193,12 +155,10 @@ const EditForm = ({ grocery, finished }: Props) => {
           />
         </label>
         {errors.alt_unit && <p>{(errors.alt_unit as FieldError).message}</p>}
-
-        <input type="submit" />
         {isLoading && <p>Loading...</p>}
       </fieldset>
     </form>
   )
 }
 
-export default React.memo(EditForm)
+export default React.memo(AddForm)

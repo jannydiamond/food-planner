@@ -1,4 +1,4 @@
 /*
     Deletes an inventory.
 */
-DELETE FROM inventory WHERE id = ${id}
+DELETE FROM grocery WHERE id = ${id}
