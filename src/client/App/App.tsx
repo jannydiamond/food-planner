@@ -1,7 +1,12 @@
 import Routes from 'client/Routes'
 
 const App = () => {
-  return <Routes />
+  return (
+    <>
+      <Routes />
+      <div id="modal-root" />
+    </>
+  )
 }
 
 export default App
