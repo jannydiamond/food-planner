@@ -1,11 +1,13 @@
 import { useGetAllHouseholdsOfUserQuery } from 'client/Redux/api/households'
 import React from 'react'
 import { Household } from 'model/types'
-import AddForm from './AddForm'
 import { useNavigate } from 'react-router-dom'
+import { useModal } from 'client/hooks/useModal'
+import AddHouseholdModal from './AddHouseholdModal'
 
 const Households = () => {
   const navigate = useNavigate()
+  const addHouseholdModal = useModal()
 
   const { data: households, isLoading } = useGetAllHouseholdsOfUserQuery(
     undefined,
@@ -17,8 +19,8 @@ const Households = () => {
   return (
     <div>
       <h1>Households</h1>
-      <AddForm />
-      <h2>Listing</h2>
+      <button onClick={addHouseholdModal.show}>Add</button>
+      <AddHouseholdModal modal={addHouseholdModal} />
       {isLoading && <p>Loading...</p>}
       {households && households.length > 0 && (
         <ul>

@@ -1,31 +1,19 @@
-import {
-  useDeleteHouseholdMutation,
-  useGetHouseholdByIdQuery,
-} from 'client/Redux/api/households'
-import React, { useCallback, useState } from 'react'
-import { Link, useNavigate, useParams } from 'react-router-dom'
-import EditForm from './EditForm'
+import { useModal } from 'client/hooks/useModal'
+import { useGetHouseholdByIdQuery } from 'client/Redux/api/households'
+import React from 'react'
+import { Link, useParams } from 'react-router-dom'
+import DeleteHouseholdModal from './DeleteHouseholdModal'
+import EditHouseholdModal from './EditHouseholdModal'
 
 const HouseholdDetails = () => {
   const { householdId } = useParams() as { householdId: string }
-  const navigate = useNavigate()
-  const [isEditing, setIsEditing] = useState<boolean>(false)
+
+  const editHouseholdModal = useModal()
+  const deleteHouseholdModal = useModal()
 
   const { data: household, isLoading } = useGetHouseholdByIdQuery(householdId, {
     refetchOnMountOrArgChange: true,
   })
-
-  const toggleEditHousehold = () => setIsEditing(!isEditing)
-
-  const [
-    deleteHousehold,
-    { isLoading: isLoadingDeleteHousehold, error: errorDeleteHousehold },
-  ] = useDeleteHouseholdMutation()
-
-  const handleDeleteHousehold = useCallback(async () => {
-    deleteHousehold(householdId)
-    navigate('/', { replace: true })
-  }, [deleteHousehold, householdId, navigate])
 
   if (!household) return null
 
@@ -41,20 +29,17 @@ const HouseholdDetails = () => {
           <Link to={'/'}>Zurück</Link>
           <p>Created by: {created_by}</p>
           <p>
-            <button onClick={toggleEditHousehold}>Edit</button>
-            <button onClick={handleDeleteHousehold}>Delete</button>
+            <button onClick={editHouseholdModal.show}>Edit</button>
+            <button onClick={deleteHouseholdModal.show}>Delete</button>
           </p>
-          {isEditing && (
-            <EditForm
-              household={household}
-              finished={() => setIsEditing(false)}
-            />
-          )}
-
-          <p>
-            {errorDeleteHousehold && <p>Something went wrong!</p>}
-            {isLoadingDeleteHousehold && <p>Loading...</p>}
-          </p>
+          <EditHouseholdModal
+            household={household}
+            modal={editHouseholdModal}
+          />
+          <DeleteHouseholdModal
+            household={household}
+            modal={deleteHouseholdModal}
+          />
         </>
       )}
     </>

@@ -5,14 +5,14 @@ import { useForm } from 'react-hook-form'
 
 type Props = {
   household: Household
-  finished: () => void
+  closeModal: () => void
 }
 
 type EditHouseholdFormData = {
   household_name: string
 }
 
-const EditForm = ({ household, finished }: Props) => {
+const EditForm = ({ household, closeModal }: Props) => {
   const {
     register,
     handleSubmit,
@@ -28,14 +28,14 @@ const EditForm = ({ household, finished }: Props) => {
         household_name: data.household_name,
       })
 
-      finished()
+      closeModal()
     },
 
-    [editHousehold, household.id, finished]
+    [editHousehold, household.id, closeModal]
   )
 
   return (
-    <form onSubmit={handleSubmit(handleEditHousehold)}>
+    <form id="editHousehold" onSubmit={handleSubmit(handleEditHousehold)}>
       <fieldset>
         <legend>Edit household</legend>
         {error && <p>Something went wrong!</p>}
@@ -43,13 +43,13 @@ const EditForm = ({ household, finished }: Props) => {
           <p>Household name</p>
           <input
             type="text"
+            defaultValue={household.household_name}
             {...register('household_name', {
               required: 'Household name is required!',
             })}
           />
         </label>
         {errors.household_name && <p>{errors.household_name.message}</p>}
-        <input type="submit" />
         {isLoading && <p>Loading...</p>}
       </fieldset>
     </form>
