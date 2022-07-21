@@ -1,42 +1,35 @@
+import { useModal } from 'client/hooks/useModal'
 import { useGetGroceriesQuery } from 'client/Redux/api/groceries'
 import {
-  useDeleteGroceryFromInventoryMutation,
-  useGetGroceriesOfInventoryQuery,
-  useGetInventoryByIdQuery,
+  useGetGroceriesOfInventoryQuery
 } from 'client/Redux/api/inventories'
-import { Grocery, InventoryHasGrocery } from 'model/types'
-import React, { useCallback, useState } from 'react'
-import AddForm from './AddForm'
-import EditForm from './EditForm'
+import { Grocery, Inventory, InventoryHasGrocery } from 'model/types'
+import React, { useState } from 'react'
+import AddInventoryGroceryModal from './AddInventoryGroceryModal'
+import DeleteInventoryGroceryModal from './DeleteInventoryGroceryModal'
+import EditInventoryGroceryModal from './EditInventoryGroceryModal'
 
 type Props = {
   householdId: string
-  inventoryId: string
+  inventory: Inventory
 }
 
-const InventoryGroceries = ({ householdId, inventoryId }: Props) => {
+const InventoryGroceries = ({ householdId, inventory }: Props) => {
+  const addInventoryGroceryModal = useModal()
+  const editInventoryGroceryModal = useModal()
+  const deleteInventoryGroceryModal = useModal()
+
   const [groceryToEdit, setGroceryToEdit] =
-    useState<null | InventoryHasGrocery>(null)
-  const [isEditing, setIsEditing] = useState<boolean>(false)
+  useState<null | InventoryHasGrocery>(null)
 
-  const { data: inventory, isLoading } = useGetInventoryByIdQuery(
-    {
-      id: inventoryId,
-      household_id: householdId,
-    },
-    {
-      refetchOnMountOrArgChange: true,
-    }
-  )
-
-  const { data: groceries, isLoading: isLoadingGroceries } =
+  const { data: groceries } =
     useGetGroceriesQuery(undefined, {
       refetchOnMountOrArgChange: true,
     })
 
-  const { data: inventoryGroceries } = useGetGroceriesOfInventoryQuery(
+  const { data: inventoryGroceries, isLoading } = useGetGroceriesOfInventoryQuery(
     {
-      id: inventoryId,
+      id: inventory.id,
       household_id: householdId,
     },
     {
@@ -45,33 +38,21 @@ const InventoryGroceries = ({ householdId, inventoryId }: Props) => {
   )
 
   const toggleEditGrocery = (grocery: InventoryHasGrocery) => {
-    setIsEditing(!isEditing)
     setGroceryToEdit(grocery)
+    editInventoryGroceryModal.show()
   }
-
-  const [removeGroceryFromInventory] = useDeleteGroceryFromInventoryMutation()
-
-  const handleDeleteGrocery = useCallback(
-    async (grocery_id: string) => {
-      removeGroceryFromInventory({
-        grocery_id,
-        inventory_id: inventoryId,
-        household_id: householdId,
-      })
-    },
-    [householdId, inventoryId, removeGroceryFromInventory]
-  )
 
   if (!inventory) return null
 
   return (
     <>
-      {isLoading || isLoadingGroceries ? (
+      {isLoading ? (
         <p>Loading...</p>
       ) : (
         <>
-          <h2>Groceries</h2>
-          <AddForm householdId={householdId} id={inventoryId} />
+          <h3>Groceries</h3>
+          <button onClick={addInventoryGroceryModal.show}>Add</button>
+          <AddInventoryGroceryModal householdId={householdId} inventoryId={inventory.id} modal={addInventoryGroceryModal} />
           {inventoryGroceries ? (
             <ul>
               {inventoryGroceries.map((grocery) => {
@@ -89,19 +70,10 @@ const InventoryGroceries = ({ householdId, inventoryId }: Props) => {
                       Edit
                     </button>
                     <button
-                      onClick={() => handleDeleteGrocery(grocery.grocery_id)}
+                      onClick={deleteInventoryGroceryModal.show}
                     >
                       Delete
                     </button>
-                    {isEditing &&
-                      groceryToEdit &&
-                      groceryToEdit.grocery_id === grocery.grocery_id && (
-                        <EditForm
-                          householdId={householdId}
-                          grocery={grocery}
-                          finished={() => setIsEditing(false)}
-                        />
-                      )}
                   </li>
                 )
               })}
@@ -109,6 +81,20 @@ const InventoryGroceries = ({ householdId, inventoryId }: Props) => {
           ) : (
             '-'
           )}
+        </>
+      )}
+      {groceryToEdit && (
+        <>
+          <EditInventoryGroceryModal
+            householdId={householdId}
+            inventoryGrocery={groceryToEdit}
+            modal={editInventoryGroceryModal}
+          />
+          <DeleteInventoryGroceryModal
+            householdId={householdId}
+            inventoryGrocery={groceryToEdit}
+            modal={deleteInventoryGroceryModal}
+          />
         </>
       )}
     </>

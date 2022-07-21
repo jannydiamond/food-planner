@@ -47,7 +47,6 @@ const Users = () => {
         <p>Loading...</p>
       ) : (
         <>
-          <h2>Users</h2>
           <button onClick={addUserModal.show}>Add</button>
           <AddUserModal householdId={householdId} modal={addUserModal} />
           {users ? (
