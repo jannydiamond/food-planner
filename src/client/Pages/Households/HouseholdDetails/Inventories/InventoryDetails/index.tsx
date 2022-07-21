@@ -1,7 +1,5 @@
 import { useModal } from 'client/hooks/useModal'
-import {
-  useGetInventoryByIdQuery,
-} from 'client/Redux/api/inventories'
+import { useGetInventoryByIdQuery } from 'client/Redux/api/inventories'
 import React from 'react'
 import { Link, useParams } from 'react-router-dom'
 import DeleteInventoryModal from './DeleteInventoryModal'
@@ -15,15 +13,10 @@ const InventoryDetails = () => {
   const editInventoryModal = useModal()
   const deleteInventoryModal = useModal()
 
-  const { data: inventory, isLoading } = useGetInventoryByIdQuery(
-    {
-      id: inventoryId,
-      household_id: householdId,
-    },
-    {
-      refetchOnMountOrArgChange: true,
-    }
-  )
+  const { data: inventory, isLoading } = useGetInventoryByIdQuery({
+    id: inventoryId,
+    household_id: householdId,
+  })
 
   if (!inventory) return null
 
@@ -55,10 +48,7 @@ const InventoryDetails = () => {
             inventory={inventory}
             modal={deleteInventoryModal}
           />
-          <InventoryGroceries
-            householdId={householdId}
-            inventory={inventory}
-          />
+          <InventoryGroceries householdId={householdId} inventory={inventory} />
         </>
       )}
     </>

@@ -1,8 +1,6 @@
 import { useModal } from 'client/hooks/useModal'
 import { useGetGroceriesQuery } from 'client/Redux/api/groceries'
-import {
-  useGetGroceriesOfInventoryQuery
-} from 'client/Redux/api/inventories'
+import { useGetGroceriesOfInventoryQuery } from 'client/Redux/api/inventories'
 import { Grocery, Inventory, InventoryHasGrocery } from 'model/types'
 import React, { useState } from 'react'
 import AddInventoryGroceryModal from './AddInventoryGroceryModal'
@@ -20,22 +18,15 @@ const InventoryGroceries = ({ householdId, inventory }: Props) => {
   const deleteInventoryGroceryModal = useModal()
 
   const [groceryToEdit, setGroceryToEdit] =
-  useState<null | InventoryHasGrocery>(null)
+    useState<null | InventoryHasGrocery>(null)
 
-  const { data: groceries } =
-    useGetGroceriesQuery(undefined, {
-      refetchOnMountOrArgChange: true,
-    })
+  const { data: groceries } = useGetGroceriesQuery(undefined)
 
-  const { data: inventoryGroceries, isLoading } = useGetGroceriesOfInventoryQuery(
-    {
+  const { data: inventoryGroceries, isLoading } =
+    useGetGroceriesOfInventoryQuery({
       id: inventory.id,
       household_id: householdId,
-    },
-    {
-      refetchOnMountOrArgChange: true,
-    }
-  )
+    })
 
   const toggleEditGrocery = (grocery: InventoryHasGrocery) => {
     setGroceryToEdit(grocery)
@@ -52,7 +43,11 @@ const InventoryGroceries = ({ householdId, inventory }: Props) => {
         <>
           <h3>Groceries</h3>
           <button onClick={addInventoryGroceryModal.show}>Add</button>
-          <AddInventoryGroceryModal householdId={householdId} inventoryId={inventory.id} modal={addInventoryGroceryModal} />
+          <AddInventoryGroceryModal
+            householdId={householdId}
+            inventoryId={inventory.id}
+            modal={addInventoryGroceryModal}
+          />
           {inventoryGroceries ? (
             <ul>
               {inventoryGroceries.map((grocery) => {
@@ -69,9 +64,7 @@ const InventoryGroceries = ({ householdId, inventory }: Props) => {
                     <button onClick={() => toggleEditGrocery(grocery)}>
                       Edit
                     </button>
-                    <button
-                      onClick={deleteInventoryGroceryModal.show}
-                    >
+                    <button onClick={deleteInventoryGroceryModal.show}>
                       Delete
                     </button>
                   </li>
@@ -83,6 +76,7 @@ const InventoryGroceries = ({ householdId, inventory }: Props) => {
           )}
         </>
       )}
+
       {groceryToEdit && (
         <>
           <EditInventoryGroceryModal

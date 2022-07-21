@@ -1,5 +1,4 @@
 import React from 'react'
-import { createRoot } from 'react-dom/client'
 import App from 'client/App/App'
 import GlobalStyles from 'client/GlobalStyles'
 import defaultTheme from 'theme/defaultTheme'
@@ -8,9 +7,8 @@ import { Provider } from 'react-redux'
 import { actions, store } from 'client/Redux/store'
 import { BrowserRouter } from 'react-router-dom'
 import { getAuthToken } from 'client/utils/localStorage'
+import ReactDOM from 'react-dom'
 //import reportWebVitals from './client/reportWebVitals'
-
-const root = createRoot(document.getElementById('root') as HTMLElement)
 
 // If the user already has a auth token, we set it to the store,
 // so they will be logged in automatically
@@ -20,7 +18,7 @@ if (token) {
   store.dispatch(actions.authentication.setToken(token))
 }
 
-root.render(
+ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
       <BrowserRouter>
@@ -30,7 +28,8 @@ root.render(
         </ThemeProvider>
       </BrowserRouter>
     </Provider>
-  </React.StrictMode>
+  </React.StrictMode>,
+  document.getElementById('root')
 )
 
 // If you want to start measuring performance in your app, pass a function
