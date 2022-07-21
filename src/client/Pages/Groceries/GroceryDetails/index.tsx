@@ -11,9 +11,7 @@ const GroceryDetails = () => {
   const editGroceryModal = useModal()
   const deleteGroceryModal = useModal()
 
-  const { data: grocery, isLoading } = useGetGroceryByIdQuery(groceryId, {
-    refetchOnMountOrArgChange: true,
-  })
+  const { data: grocery, isLoading } = useGetGroceryByIdQuery(groceryId)
 
   if (!grocery) return null
 

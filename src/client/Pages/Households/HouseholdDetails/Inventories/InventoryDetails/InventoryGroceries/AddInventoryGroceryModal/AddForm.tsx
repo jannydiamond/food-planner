@@ -1,9 +1,12 @@
-import { usePostGroceryToInventoryMutation } from 'client/Redux/api/inventories'
+import {
+  useGetGroceriesOfInventoryQuery,
+  usePostGroceryToInventoryMutation,
+} from 'client/Redux/api/inventories'
 import { useGetGroceriesQuery } from 'client/Redux/api/groceries'
 import React, { useCallback, useEffect, useState } from 'react'
 import { Controller, FieldError, useForm } from 'react-hook-form'
 import { SelectOption } from 'client/types'
-import { Grocery, Unit } from 'model/types'
+import { Grocery, InventoryHasGrocery, Unit } from 'model/types'
 import Select, { OnChangeValue } from 'react-select'
 import { useGetAllUnitsQuery } from 'client/Redux/api/units'
 
@@ -19,7 +22,7 @@ type Props = {
   closeModal: () => void
 }
 
-const AddForm = ({householdId, id, closeModal}: Props) => {
+const AddForm = ({ householdId, id, closeModal }: Props) => {
   const {
     register,
     handleSubmit,
@@ -34,9 +37,12 @@ const AddForm = ({householdId, id, closeModal}: Props) => {
   const [unitValue, setUnitValue] = useState<null | SelectOption>(null)
 
   const { data: groceries, isLoading: isLoadingGroceries } =
-    useGetGroceriesQuery(undefined, {
-      refetchOnMountOrArgChange: true,
-    })
+    useGetGroceriesQuery(undefined)
+
+  const { data: inventoryGroceries } = useGetGroceriesOfInventoryQuery({
+    id: id,
+    household_id: householdId,
+  })
 
   const { data: units, isLoading: isLoadingUnits } = useGetAllUnitsQuery()
 
@@ -64,7 +70,15 @@ const AddForm = ({householdId, id, closeModal}: Props) => {
 
       closeModal()
     },
-    [groceryValue?.value, groceries, addGrocery, householdId, id, unitValue?.value, closeModal]
+    [
+      groceryValue?.value,
+      groceries,
+      addGrocery,
+      householdId,
+      id,
+      unitValue?.value,
+      closeModal,
+    ]
   )
 
   const handleGroceryChange = (
@@ -82,17 +96,32 @@ const AddForm = ({householdId, id, closeModal}: Props) => {
   }
 
   useEffect(() => {
-    if (groceries) {
-      const options: SelectOption[] = groceries.map((grocery: Grocery) => {
-        return {
-          value: grocery.id,
-          label: grocery.grocery_name,
+    if (groceries && inventoryGroceries) {
+      const availableGroceries = groceries.filter((grocery: Grocery) => {
+        const groceryAlreadyInInventory = inventoryGroceries.find(
+          (inventoryGrocery: InventoryHasGrocery) =>
+            inventoryGrocery.grocery_id === grocery.id
+        )
+
+        if (groceryAlreadyInInventory === undefined) {
+          return grocery
+        } else {
+          return null
         }
       })
 
+      const options: SelectOption[] = availableGroceries.map(
+        (grocery: Grocery) => {
+          return {
+            value: grocery.id,
+            label: grocery.grocery_name,
+          }
+        }
+      )
+
       setGroceryOptions([{ value: null, label: 'No Grocery' }, ...options])
     }
-  }, [groceries])
+  }, [groceries, inventoryGroceries])
 
   useEffect(() => {
     if (units) {

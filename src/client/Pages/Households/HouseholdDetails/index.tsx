@@ -11,9 +11,7 @@ const HouseholdDetails = () => {
   const editHouseholdModal = useModal()
   const deleteHouseholdModal = useModal()
 
-  const { data: household, isLoading } = useGetHouseholdByIdQuery(householdId, {
-    refetchOnMountOrArgChange: true,
-  })
+  const { data: household, isLoading } = useGetHouseholdByIdQuery(householdId)
 
   if (!household) return null
 

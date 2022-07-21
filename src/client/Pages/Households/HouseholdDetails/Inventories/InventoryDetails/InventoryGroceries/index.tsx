@@ -19,6 +19,8 @@ const InventoryGroceries = ({ householdId, inventory }: Props) => {
 
   const [groceryToEdit, setGroceryToEdit] =
     useState<null | InventoryHasGrocery>(null)
+  const [groceryToDelete, setGroceryToDelete] =
+    useState<null | InventoryHasGrocery>(null)
 
   const { data: groceries } = useGetGroceriesQuery(undefined)
 
@@ -31,6 +33,11 @@ const InventoryGroceries = ({ householdId, inventory }: Props) => {
   const toggleEditGrocery = (grocery: InventoryHasGrocery) => {
     setGroceryToEdit(grocery)
     editInventoryGroceryModal.show()
+  }
+
+  const toggleDeleteGrocery = (grocery: InventoryHasGrocery) => {
+    setGroceryToDelete(grocery)
+    deleteInventoryGroceryModal.show()
   }
 
   if (!inventory) return null
@@ -64,7 +71,7 @@ const InventoryGroceries = ({ householdId, inventory }: Props) => {
                     <button onClick={() => toggleEditGrocery(grocery)}>
                       Edit
                     </button>
-                    <button onClick={deleteInventoryGroceryModal.show}>
+                    <button onClick={() => toggleDeleteGrocery(grocery)}>
                       Delete
                     </button>
                   </li>
@@ -78,18 +85,18 @@ const InventoryGroceries = ({ householdId, inventory }: Props) => {
       )}
 
       {groceryToEdit && (
-        <>
-          <EditInventoryGroceryModal
-            householdId={householdId}
-            inventoryGrocery={groceryToEdit}
-            modal={editInventoryGroceryModal}
-          />
-          <DeleteInventoryGroceryModal
-            householdId={householdId}
-            inventoryGrocery={groceryToEdit}
-            modal={deleteInventoryGroceryModal}
-          />
-        </>
+        <EditInventoryGroceryModal
+          householdId={householdId}
+          inventoryGrocery={groceryToEdit}
+          modal={editInventoryGroceryModal}
+        />
+      )}
+      {groceryToDelete && (
+        <DeleteInventoryGroceryModal
+          householdId={householdId}
+          inventoryGrocery={groceryToDelete}
+          modal={deleteInventoryGroceryModal}
+        />
       )}
     </>
   )

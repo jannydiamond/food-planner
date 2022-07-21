@@ -33,9 +33,7 @@ const AddForm = (props: Props) => {
   const [unitValue, setUnitValue] = useState<null | SelectOption>(null)
 
   const { data: groceries, isLoading: isLoadingGroceries } =
-    useGetGroceriesQuery(undefined, {
-      refetchOnMountOrArgChange: true,
-    })
+    useGetGroceriesQuery(undefined)
 
   const { data: units, isLoading: isLoadingUnits } = useGetAllUnitsQuery()
 

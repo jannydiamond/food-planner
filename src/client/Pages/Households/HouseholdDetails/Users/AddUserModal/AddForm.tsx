@@ -19,9 +19,7 @@ const AddForm = ({ closeModal, householdId }: Props) => {
     formState: { errors },
   } = useForm<AddUserFormData>()
 
-  const { data: users } = useGetAllUsersQuery(undefined, {
-    refetchOnMountOrArgChange: true,
-  })
+  const { data: users } = useGetAllUsersQuery(undefined)
 
   const [addUser, { isLoading, error }] = usePostUserToHouseholdMutation()
 

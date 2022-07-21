@@ -19,30 +19,18 @@ const ShoppingListGroceries = ({ householdId, shoppingListId }: Props) => {
     useState<null | ShoppingListHasGrocery>(null)
   const [isEditing, setIsEditing] = useState<boolean>(false)
 
-  const { data: shoppingList, isLoading } = useGetShoppingListByIdQuery(
-    {
-      id: shoppingListId,
-      household_id: householdId,
-    },
-    {
-      refetchOnMountOrArgChange: true,
-    }
-  )
+  const { data: shoppingList, isLoading } = useGetShoppingListByIdQuery({
+    id: shoppingListId,
+    household_id: householdId,
+  })
 
   const { data: groceries, isLoading: isLoadingGroceries } =
-    useGetGroceriesQuery(undefined, {
-      refetchOnMountOrArgChange: true,
-    })
+    useGetGroceriesQuery(undefined)
 
-  const { data: shoppingListGroceries } = useGetGroceriesOfShoppingListQuery(
-    {
-      id: shoppingListId,
-      household_id: householdId,
-    },
-    {
-      refetchOnMountOrArgChange: true,
-    }
-  )
+  const { data: shoppingListGroceries } = useGetGroceriesOfShoppingListQuery({
+    id: shoppingListId,
+    household_id: householdId,
+  })
 
   const toggleEditGrocery = (grocery: ShoppingListHasGrocery) => {
     setIsEditing(!isEditing)
