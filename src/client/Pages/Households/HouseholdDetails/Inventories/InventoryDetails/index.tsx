@@ -1,17 +1,19 @@
+import { useModal } from 'client/hooks/useModal'
 import {
-  useDeleteInventoryMutation,
   useGetInventoryByIdQuery,
 } from 'client/Redux/api/inventories'
-import React, { useCallback, useState } from 'react'
-import { Link, useNavigate, useParams } from 'react-router-dom'
-import EditForm from './EditForm'
+import React from 'react'
+import { Link, useParams } from 'react-router-dom'
+import DeleteInventoryModal from './DeleteInventoryModal'
+import EditInventoryModal from './EditInventoryModal'
 import InventoryGroceries from './InventoryGroceries'
 
 const InventoryDetails = () => {
   const { householdId } = useParams() as { householdId: string }
   const { inventoryId } = useParams() as { inventoryId: string }
-  const navigate = useNavigate()
-  const [isEditing, setIsEditing] = useState<boolean>(false)
+
+  const editInventoryModal = useModal()
+  const deleteInventoryModal = useModal()
 
   const { data: inventory, isLoading } = useGetInventoryByIdQuery(
     {
@@ -23,22 +25,9 @@ const InventoryDetails = () => {
     }
   )
 
-  const toggleEditInventory = () => setIsEditing(!isEditing)
-
-  const [
-    deleteInventory,
-    { isLoading: isLoadingDeleteInventory, error: errorDeleteInventory },
-  ] = useDeleteInventoryMutation()
-
-  const handleDeleteInventory = useCallback(async () => {
-    deleteInventory({
-      id: inventoryId,
-      household_id: householdId,
-    })
-    navigate(`/households/${householdId}/inventories`, { replace: true })
-  }, [deleteInventory, householdId, inventoryId, navigate])
-
   if (!inventory) return null
+
+  console.log('Details', inventory)
 
   const { inventory_name, created_by } = inventory
 
@@ -48,29 +37,27 @@ const InventoryDetails = () => {
         <p>Loading...</p>
       ) : (
         <>
-          <h1>Inventory: {inventory_name}</h1>
+          <h2>{inventory_name}</h2>
           <Link to={`/households/${householdId}/inventories`}>Zurück</Link>
 
           <p>Created by: {created_by}</p>
           <p>
-            <button onClick={toggleEditInventory}>Edit</button>
-            <button onClick={handleDeleteInventory}>Delete</button>
+            <button onClick={editInventoryModal.show}>Edit</button>
+            <button onClick={deleteInventoryModal.show}>Delete</button>
           </p>
-          {isEditing && (
-            <EditForm
-              householdId={householdId}
-              inventory={inventory}
-              finished={() => setIsEditing(false)}
-            />
-          )}
-
-          <p>
-            {errorDeleteInventory && <p>Something went wrong!</p>}
-            {isLoadingDeleteInventory && <p>Loading...</p>}
-          </p>
+          <EditInventoryModal
+            householdId={householdId}
+            inventory={inventory}
+            modal={editInventoryModal}
+          />
+          <DeleteInventoryModal
+            householdId={householdId}
+            inventory={inventory}
+            modal={deleteInventoryModal}
+          />
           <InventoryGroceries
             householdId={householdId}
-            inventoryId={inventoryId}
+            inventory={inventory}
           />
         </>
       )}

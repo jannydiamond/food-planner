@@ -6,14 +6,14 @@ import { useForm } from 'react-hook-form'
 type Props = {
   householdId: string
   inventory: Inventory
-  finished: () => void
+  closeModal: () => void
 }
 
 type EditInventoryFormData = {
   inventory_name: string
 }
 
-const EditForm = ({ householdId, inventory, finished }: Props) => {
+const EditForm = ({ householdId, inventory, closeModal }: Props) => {
   const {
     register,
     handleSubmit,
@@ -30,14 +30,14 @@ const EditForm = ({ householdId, inventory, finished }: Props) => {
         household_id: householdId,
       })
 
-      finished()
+      closeModal()
     },
 
-    [editInventory, inventory.id, householdId, finished]
+    [editInventory, inventory.id, householdId, closeModal]
   )
 
   return (
-    <form onSubmit={handleSubmit(handleEditInventory)}>
+    <form id="editInventory" onSubmit={handleSubmit(handleEditInventory)}>
       <fieldset>
         <legend>Edit inventory</legend>
         {error && <p>Something went wrong!</p>}
@@ -45,13 +45,13 @@ const EditForm = ({ householdId, inventory, finished }: Props) => {
           <p>Inventory name</p>
           <input
             type="text"
+            defaultValue={inventory.inventory_name}
             {...register('inventory_name', {
               required: 'Inventory name is required!',
             })}
           />
         </label>
         {errors.inventory_name && <p>{errors.inventory_name.message}</p>}
-        <input type="submit" />
         {isLoading && <p>Loading...</p>}
       </fieldset>
     </form>
