@@ -20,8 +20,6 @@ const InventoryDetails = () => {
 
   if (!inventory) return null
 
-  console.log('Details', inventory)
-
   const { inventory_name, created_by } = inventory
 
   return (

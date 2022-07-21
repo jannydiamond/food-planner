@@ -82,7 +82,7 @@ const EditForm = ({ householdId, inventoryGrocery, closeModal }: Props) => {
   }, [inventoryGrocery.unit, units])
 
   return (
-    <form onSubmit={handleSubmit(handleEditGrocery)}>
+    <form id="editInventoryGrocery" onSubmit={handleSubmit(handleEditGrocery)}>
       <fieldset>
         <legend>Edit unit</legend>
         {error && <p>Something went wrong!</p>}

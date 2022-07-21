@@ -34,9 +34,7 @@ const Units = ({ token }: Props) => {
 
   const [currentUnit, setCurrentUnit] = useState<Unit | null>(null)
 
-  const { data: units, isLoading } = useGetAllUnitsQuery(undefined, {
-    refetchOnMountOrArgChange: true,
-  })
+  const { data: units, isLoading } = useGetAllUnitsQuery(undefined)
 
   const handleEditUnit = (id: number) => {
     const unit = units?.find((unit) => unit.id === id) ?? null

@@ -8,12 +8,8 @@ const ShoppingLists = () => {
   const { householdId } = useParams() as { householdId: string }
   const navigate = useNavigate()
 
-  const { data: shoppingLists, isLoading } = useGetShoppingListsQuery(
-    householdId,
-    {
-      refetchOnMountOrArgChange: true,
-    }
-  )
+  const { data: shoppingLists, isLoading } =
+    useGetShoppingListsQuery(householdId)
 
   return (
     <div>

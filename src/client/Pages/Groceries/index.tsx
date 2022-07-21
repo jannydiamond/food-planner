@@ -9,9 +9,7 @@ const Groceries = () => {
   const navigate = useNavigate()
   const addGroceryModal = useModal()
 
-  const { data: groceries, isLoading } = useGetGroceriesQuery(undefined, {
-    refetchOnMountOrArgChange: true,
-  })
+  const { data: groceries, isLoading } = useGetGroceriesQuery(undefined)
 
   return (
     <div>

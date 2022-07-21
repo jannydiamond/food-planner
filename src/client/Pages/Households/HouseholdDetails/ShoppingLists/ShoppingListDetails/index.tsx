@@ -13,15 +13,10 @@ const ShoppingListDetails = () => {
   const navigate = useNavigate()
   const [isEditing, setIsEditing] = useState<boolean>(false)
 
-  const { data: shoppingList, isLoading } = useGetShoppingListByIdQuery(
-    {
-      id: shoppingListId,
-      household_id: householdId,
-    },
-    {
-      refetchOnMountOrArgChange: true,
-    }
-  )
+  const { data: shoppingList, isLoading } = useGetShoppingListByIdQuery({
+    id: shoppingListId,
+    household_id: householdId,
+  })
 
   const toggleEditShoppingList = () => setIsEditing(!isEditing)
 

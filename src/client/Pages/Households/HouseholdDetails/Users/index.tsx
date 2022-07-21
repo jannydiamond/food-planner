@@ -20,13 +20,9 @@ const Users = () => {
     'id' | 'username'
   > | null>(null)
 
-  const { data: household, isLoading } = useGetHouseholdByIdQuery(householdId, {
-    refetchOnMountOrArgChange: true,
-  })
+  const { data: household, isLoading } = useGetHouseholdByIdQuery(householdId)
 
-  const { data: users } = useGetAllUsersOfHouseholdQuery(householdId, {
-    refetchOnMountOrArgChange: true,
-  })
+  const { data: users } = useGetAllUsersOfHouseholdQuery(householdId)
 
   const handleDeleteUser = (user_id: string) => {
     const user = users?.find((user) => user.id === user_id) ?? null

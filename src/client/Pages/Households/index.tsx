@@ -9,12 +9,8 @@ const Households = () => {
   const navigate = useNavigate()
   const addHouseholdModal = useModal()
 
-  const { data: households, isLoading } = useGetAllHouseholdsOfUserQuery(
-    undefined,
-    {
-      refetchOnMountOrArgChange: true,
-    }
-  )
+  const { data: households, isLoading } =
+    useGetAllHouseholdsOfUserQuery(undefined)
 
   return (
     <div>

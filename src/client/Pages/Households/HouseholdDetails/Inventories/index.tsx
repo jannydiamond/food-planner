@@ -11,9 +11,7 @@ const Inventories = () => {
 
   const addInventoryModal = useModal()
 
-  const { data: inventories, isLoading } = useGetInventoriesQuery(householdId, {
-    refetchOnMountOrArgChange: true,
-  })
+  const { data: inventories, isLoading } = useGetInventoriesQuery(householdId)
 
   return (
     <>
