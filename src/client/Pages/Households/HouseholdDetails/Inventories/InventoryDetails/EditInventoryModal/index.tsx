@@ -16,7 +16,11 @@ const EditInventoryModal = ({ householdId, inventory, modal }: Props) => {
     <modal.RenderModal titleColor="white" titleLabel="Edit inventory">
       <>
         <ModalBodyWrapper hasFooter>
-          <EditForm householdId={householdId} inventory={inventory} closeModal={modal.hide} />
+          <EditForm
+            householdId={householdId}
+            inventory={inventory}
+            closeModal={modal.hide}
+          />
         </ModalBodyWrapper>
         <ModalFooterWrapper>
           <button onClick={modal.hide}>Cancel</button>

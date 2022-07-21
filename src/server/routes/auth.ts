@@ -1,5 +1,5 @@
 import express, { NextFunction, Request, Response } from 'express'
-import bcrypt from 'bcrypt'
+import bcrypt from 'bcryptjs'
 import { db } from '../database'
 import { generateAccessToken } from '../auth'
 
