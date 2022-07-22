@@ -6,14 +6,14 @@ import { useForm } from 'react-hook-form'
 type Props = {
   householdId: string
   shoppingList: ShoppingList
-  finished: () => void
+  closeModal: () => void
 }
 
 type EditShoppingListFormData = {
   shopping_list_name: string
 }
 
-const EditForm = ({ householdId, shoppingList, finished }: Props) => {
+const EditForm = ({ householdId, shoppingList, closeModal }: Props) => {
   const {
     register,
     handleSubmit,
@@ -30,14 +30,14 @@ const EditForm = ({ householdId, shoppingList, finished }: Props) => {
         household_id: householdId,
       })
 
-      finished()
+      closeModal()
     },
 
-    [editShoppingList, shoppingList.id, householdId, finished]
+    [editShoppingList, shoppingList.id, householdId, closeModal]
   )
 
   return (
-    <form onSubmit={handleSubmit(handleEditShoppingList)}>
+    <form id="editShoppingList" onSubmit={handleSubmit(handleEditShoppingList)}>
       <fieldset>
         <legend>Edit shopping list</legend>
         {error && <p>Something went wrong!</p>}
@@ -45,6 +45,7 @@ const EditForm = ({ householdId, shoppingList, finished }: Props) => {
           <p>Shopping list name</p>
           <input
             type="text"
+            defaultValue={shoppingList.shopping_list_name}
             {...register('shopping_list_name', {
               required: 'Shopping list name is required!',
             })}
@@ -53,7 +54,6 @@ const EditForm = ({ householdId, shoppingList, finished }: Props) => {
         {errors.shopping_list_name && (
           <p>{errors.shopping_list_name.message}</p>
         )}
-        <input type="submit" />
         {isLoading && <p>Loading...</p>}
       </fieldset>
     </form>

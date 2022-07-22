@@ -8,8 +8,8 @@ import Select, { OnChangeValue } from 'react-select'
 
 type Props = {
   householdId: string
-  grocery: ShoppingListHasGrocery
-  finished: () => void
+  shoppingListGrocery: ShoppingListHasGrocery
+  closeModal: () => void
 }
 
 type EditGroceryFormData = {
@@ -18,7 +18,7 @@ type EditGroceryFormData = {
   in_basket: boolean
 }
 
-const EditForm = ({ householdId, grocery, finished }: Props) => {
+const EditForm = ({ householdId, shoppingListGrocery, closeModal }: Props) => {
   const {
     register,
     handleSubmit,
@@ -39,17 +39,23 @@ const EditForm = ({ householdId, grocery, finished }: Props) => {
       editGrocery({
         household_id: householdId,
         item: {
-          ...grocery,
+          ...shoppingListGrocery,
           amount: data.amount ? parseInt(data.amount) : null,
           unit: unitValue?.value ?? null,
           in_basket: false, // TODO
         },
       })
 
-      finished()
+      closeModal()
     },
 
-    [editGrocery, householdId, grocery, unitValue?.value, finished]
+    [
+      editGrocery,
+      householdId,
+      shoppingListGrocery,
+      unitValue?.value,
+      closeModal,
+    ]
   )
 
   const handleUnitChange = (newValue: OnChangeValue<SelectOption, false>) => {
@@ -72,9 +78,10 @@ const EditForm = ({ householdId, grocery, finished }: Props) => {
   }, [units])
 
   useEffect(() => {
-    if (units && grocery.unit) {
+    if (units && shoppingListGrocery.unit) {
       const selectedBaseUnit =
-        units.find((unit) => unit.unit_name === grocery.unit) ?? null
+        units.find((unit) => unit.unit_name === shoppingListGrocery.unit) ??
+        null
 
       selectedBaseUnit &&
         setUnitValue({
@@ -82,10 +89,13 @@ const EditForm = ({ householdId, grocery, finished }: Props) => {
           label: selectedBaseUnit.unit_name,
         })
     }
-  }, [grocery.unit, units])
+  }, [shoppingListGrocery.unit, units])
 
   return (
-    <form onSubmit={handleSubmit(handleEditGrocery)}>
+    <form
+      id="editShoppingListGrocery"
+      onSubmit={handleSubmit(handleEditGrocery)}
+    >
       <fieldset>
         <legend>Edit unit</legend>
         {error && <p>Something went wrong!</p>}
@@ -93,7 +103,7 @@ const EditForm = ({ householdId, grocery, finished }: Props) => {
           <p>Amount</p>
           <input
             type="number"
-            defaultValue={grocery.amount?.toString()}
+            defaultValue={shoppingListGrocery.amount?.toString()}
             {...register('amount')}
           />
         </label>
@@ -121,7 +131,6 @@ const EditForm = ({ householdId, grocery, finished }: Props) => {
           />
         </label>
         {errors.unit && <p>{(errors.unit as FieldError).message}</p>}
-        <input type="submit" />
         {isLoading && <p>Loading...</p>}
       </fieldset>
     </form>

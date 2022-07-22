@@ -1,37 +1,22 @@
-import {
-  useDeleteShoppingListMutation,
-  useGetShoppingListByIdQuery,
-} from 'client/Redux/api/shoppingLists'
-import React, { useCallback, useState } from 'react'
-import { Link, useNavigate, useParams } from 'react-router-dom'
-import EditForm from './EditForm'
+import { useModal } from 'client/hooks/useModal'
+import { useGetShoppingListByIdQuery } from 'client/Redux/api/shoppingLists'
+import React from 'react'
+import { Link, useParams } from 'react-router-dom'
+import DeleteShoppingListModal from './DeleteShoppingListModal'
+import EditShoppingListModal from './EditShoppingListModal'
 import ShoppingListGroceries from './ShoppingListGroceries'
 
 const ShoppingListDetails = () => {
   const { householdId } = useParams() as { householdId: string }
   const { shoppingListId } = useParams() as { shoppingListId: string }
-  const navigate = useNavigate()
-  const [isEditing, setIsEditing] = useState<boolean>(false)
+
+  const editShoppingListModal = useModal()
+  const deleteShoppingListModal = useModal()
 
   const { data: shoppingList, isLoading } = useGetShoppingListByIdQuery({
     id: shoppingListId,
     household_id: householdId,
   })
-
-  const toggleEditShoppingList = () => setIsEditing(!isEditing)
-
-  const [
-    deleteShoppingList,
-    { isLoading: isLoadingDeleteShoppingList, error: errorDeleteShoppingList },
-  ] = useDeleteShoppingListMutation()
-
-  const handleDeleteShoppingList = useCallback(async () => {
-    deleteShoppingList({
-      id: shoppingListId,
-      household_id: householdId,
-    })
-    navigate(`/households/${householdId}/shoppingLists`, { replace: true })
-  }, [deleteShoppingList, householdId, shoppingListId, navigate])
 
   if (!shoppingList) return null
 
@@ -43,29 +28,27 @@ const ShoppingListDetails = () => {
         <p>Loading...</p>
       ) : (
         <>
-          <h1>Shopping list: {shopping_list_name}</h1>
+          <h2>{shopping_list_name}</h2>
           <Link to={`/households/${householdId}/shopping-lists`}>Zurück</Link>
 
           <p>Created by: {created_by}</p>
           <p>
-            <button onClick={toggleEditShoppingList}>Edit</button>
-            <button onClick={handleDeleteShoppingList}>Delete</button>
+            <button onClick={editShoppingListModal.show}>Edit</button>
+            <button onClick={deleteShoppingListModal.show}>Delete</button>
           </p>
-          {isEditing && (
-            <EditForm
-              householdId={householdId}
-              shoppingList={shoppingList}
-              finished={() => setIsEditing(false)}
-            />
-          )}
-
-          <p>
-            {errorDeleteShoppingList && <p>Something went wrong!</p>}
-            {isLoadingDeleteShoppingList && <p>Loading...</p>}
-          </p>
+          <EditShoppingListModal
+            householdId={householdId}
+            shoppingList={shoppingList}
+            modal={editShoppingListModal}
+          />
+          <DeleteShoppingListModal
+            householdId={householdId}
+            shoppingList={shoppingList}
+            modal={deleteShoppingListModal}
+          />
           <ShoppingListGroceries
             householdId={householdId}
-            shoppingListId={shoppingListId}
+            shoppingList={shoppingList}
           />
         </>
       )}

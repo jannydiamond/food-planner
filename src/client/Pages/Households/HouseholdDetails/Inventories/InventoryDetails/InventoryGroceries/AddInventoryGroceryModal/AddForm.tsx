@@ -1,12 +1,9 @@
-import {
-  useGetGroceriesOfInventoryQuery,
-  usePostGroceryToInventoryMutation,
-} from 'client/Redux/api/inventories'
+import { usePostGroceryToInventoryMutation } from 'client/Redux/api/inventories'
 import { useGetGroceriesQuery } from 'client/Redux/api/groceries'
 import React, { useCallback, useEffect, useState } from 'react'
 import { Controller, FieldError, useForm } from 'react-hook-form'
 import { SelectOption } from 'client/types'
-import { Grocery, InventoryHasGrocery, Unit } from 'model/types'
+import { Grocery, Unit } from 'model/types'
 import Select, { OnChangeValue } from 'react-select'
 import { useGetAllUnitsQuery } from 'client/Redux/api/units'
 
@@ -38,11 +35,6 @@ const AddForm = ({ householdId, id, closeModal }: Props) => {
 
   const { data: groceries, isLoading: isLoadingGroceries } =
     useGetGroceriesQuery(undefined)
-
-  const { data: inventoryGroceries } = useGetGroceriesOfInventoryQuery({
-    id: id,
-    household_id: householdId,
-  })
 
   const { data: units, isLoading: isLoadingUnits } = useGetAllUnitsQuery()
 
@@ -96,32 +88,17 @@ const AddForm = ({ householdId, id, closeModal }: Props) => {
   }
 
   useEffect(() => {
-    if (groceries && inventoryGroceries) {
-      const availableGroceries = groceries.filter((grocery: Grocery) => {
-        const groceryAlreadyInInventory = inventoryGroceries.find(
-          (inventoryGrocery: InventoryHasGrocery) =>
-            inventoryGrocery.grocery_id === grocery.id
-        )
-
-        if (groceryAlreadyInInventory === undefined) {
-          return grocery
-        } else {
-          return null
+    if (groceries) {
+      const options: SelectOption[] = groceries.map((grocery: Grocery) => {
+        return {
+          value: grocery.id,
+          label: grocery.grocery_name,
         }
       })
 
-      const options: SelectOption[] = availableGroceries.map(
-        (grocery: Grocery) => {
-          return {
-            value: grocery.id,
-            label: grocery.grocery_name,
-          }
-        }
-      )
-
       setGroceryOptions([{ value: null, label: 'No Grocery' }, ...options])
     }
-  }, [groceries, inventoryGroceries])
+  }, [groceries])
 
   useEffect(() => {
     if (units) {
@@ -193,6 +170,7 @@ const AddForm = ({ householdId, id, closeModal }: Props) => {
           />
         </label>
         {errors.unit && <p>{(errors.unit as FieldError).message}</p>}
+        TODO: add best before date picker
         {isLoading && <p>Loading...</p>}
       </fieldset>
     </form>
