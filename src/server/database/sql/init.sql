@@ -79,6 +79,28 @@ CREATE TABLE IF NOT EXISTS grocery
     base_unit text references unit(unit_name),
     alt_amount int,
     alt_unit text references unit(unit_name),
+    fabricant text references fabricant(fabricant_name),
+    origin_country text references country(country_name),
+    created_by text references fp_user(username),
+    created_at timestamp DEFAULT NOW(),
+    updated_by text references fp_user(username),
+    updated_at timestamp NOT NULL DEFAULT NOW()
+);
+
+CREATE TABLE IF NOT EXISTS fabricant
+(
+    id uuid NOT NULL PRIMARY KEY DEFAULT gen_random_uuid(),
+    fabricant_name text NOT NULL UNIQUE,
+    created_by text references fp_user(username),
+    created_at timestamp DEFAULT NOW(),
+    updated_by text references fp_user(username),
+    updated_at timestamp NOT NULL DEFAULT NOW()
+);
+
+CREATE TABLE IF NOT EXISTS country
+(
+    id uuid NOT NULL PRIMARY KEY DEFAULT gen_random_uuid(),
+    country_name text NOT NULL UNIQUE,
     created_by text references fp_user(username),
     created_at timestamp DEFAULT NOW(),
     updated_by text references fp_user(username),
@@ -92,6 +114,32 @@ CREATE TABLE IF NOT EXISTS inventory_has_grocery
     amount int,
     unit text references unit(unit_name),
     bestBefore date,
+    added_by text references fp_user(username),
+    added_at timestamp DEFAULT NOW(),
+    updated_by text references fp_user(username),
+    updated_at timestamp NOT NULL DEFAULT NOW()
+);
+
+CREATE TABLE IF NOT EXISTS store
+(
+    id uuid NOT NULL PRIMARY KEY DEFAULT gen_random_uuid(),
+    store_name text NOT NULL,
+    street varchar(250),
+    street_number varchar(10),
+    postal_code varchar(250),
+    city varchar(250),
+    created_by text references fp_user(username),
+    created_at timestamp DEFAULT NOW(),
+    updated_by text references fp_user(username),
+    updated_at timestamp NOT NULL DEFAULT NOW()
+);
+
+CREATE TABLE IF NOT EXISTS grocery_price_in_store
+(
+    store_id uuid NOT NULL references inventory(id) ON DELETE CASCADE,
+    grocery_id uuid NOT NULL references grocery(id) ON DELETE CASCADE,
+    price NUMERIC(6, 2),
+    per_unit text references unit(unit_name),
     added_by text references fp_user(username),
     added_at timestamp DEFAULT NOW(),
     updated_by text references fp_user(username),
