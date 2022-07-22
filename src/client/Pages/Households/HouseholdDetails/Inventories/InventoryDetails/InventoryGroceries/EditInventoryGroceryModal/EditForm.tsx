@@ -15,6 +15,7 @@ type Props = {
 type EditGroceryFormData = {
   amount?: string | null
   unit?: string | null
+  best_before?: Date | null
 }
 
 const EditForm = ({ householdId, inventoryGrocery, closeModal }: Props) => {
@@ -40,6 +41,7 @@ const EditForm = ({ householdId, inventoryGrocery, closeModal }: Props) => {
           ...inventoryGrocery,
           amount: data.amount ? parseInt(data.amount) : null,
           unit: unitValue?.value ?? null,
+          best_before: data.best_before ? new Date(data.best_before) : null,
         },
       })
 
@@ -118,6 +120,19 @@ const EditForm = ({ householdId, inventoryGrocery, closeModal }: Props) => {
           />
         </label>
         {errors.unit && <p>{(errors.unit as FieldError).message}</p>}
+        <label htmlFor="best_before">
+          <p>Best before</p>
+          <input
+            type="date"
+            defaultValue={
+              inventoryGrocery.best_before
+                ? inventoryGrocery.best_before.toString().split('T')[0] // TODO: Use date-fns to format correctly
+                : undefined
+            }
+            {...register('best_before')}
+          />
+        </label>
+        {errors.best_before && <p>{errors.best_before.message}</p>}
         {isLoading && <p>Loading...</p>}
       </fieldset>
     </form>

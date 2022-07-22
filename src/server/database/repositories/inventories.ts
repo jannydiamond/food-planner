@@ -108,7 +108,7 @@ export class InventoriesRepository {
           def: null,
         },
         {
-          name: 'bestbefore',
+          name: 'best_before',
           def: null,
         },
         {
@@ -136,7 +136,7 @@ export class InventoriesRepository {
           skip: (col) => !col.exists,
         },
         {
-          name: 'bestbefore',
+          name: 'best_before',
           skip: (col) => !col.exists,
         },
         {
