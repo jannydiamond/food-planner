@@ -14,7 +14,6 @@ import Header from './components/Header'
 import Groceries from './Pages/Groceries'
 import GroceryDetails from './Pages/Groceries/GroceryDetails'
 import Settings from './Pages/Settings'
-import Units from './Pages/Settings/Units'
 import Inventories from './Pages/Households/HouseholdDetails/Inventories'
 import InventoryDetails from './Pages/Households/HouseholdDetails/Inventories/InventoryDetails'
 import ShoppingLists from './Pages/Households/HouseholdDetails/ShoppingLists'
@@ -22,6 +21,7 @@ import ShoppingListDetails from './Pages/Households/HouseholdDetails/ShoppingLis
 import HeaderHouseholds from './components/HeaderHouseholds'
 import Main from './components/__styled__/Main'
 import Users from './Pages/Households/HouseholdDetails/Users'
+import Units from './Pages/Settings/Units'
 
 const Routes = () => {
   return (
@@ -43,7 +43,6 @@ const Routes = () => {
       >
         <Route path="/" element={<Navigate to="/households" replace />} />
         <Route path="/households" element={<Households />} />
-
         <Route
           path="/households/:householdId"
           element={
@@ -66,10 +65,10 @@ const Routes = () => {
           />
           <Route path="users" element={<Users />} />
         </Route>
-
         <Route path="/groceries" element={<Groceries />} />
         <Route path="/groceries/:groceryId" element={<GroceryDetails />} />
         <Route path="/settings" element={<Settings />} />
+        {/*@ts-ignore*/}
         <Route path="/settings/units" element={<Units />} />
       </Route>
     </ReactRouterRoutes>
