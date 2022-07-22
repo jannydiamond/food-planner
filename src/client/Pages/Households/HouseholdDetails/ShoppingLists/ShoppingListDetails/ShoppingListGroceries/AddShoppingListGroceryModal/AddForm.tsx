@@ -16,9 +16,10 @@ type AddGroceryFormData = {
 type Props = {
   householdId: string
   id: string
+  closeModal: () => void
 }
 
-const AddForm = (props: Props) => {
+const AddForm = ({ householdId, id, closeModal }: Props) => {
   const {
     register,
     handleSubmit,
@@ -51,22 +52,25 @@ const AddForm = (props: Props) => {
       if (!groceryToAdd) return
 
       addGrocery({
-        household_id: props.householdId,
+        household_id: householdId,
         item: {
           grocery_id: groceryValue.value,
-          shopping_list_id: props.id,
+          shopping_list_id: id,
           amount: data.amount ? parseInt(data.amount) : null,
           unit: unitValue?.value ?? null,
         },
       })
+
+      closeModal()
     },
     [
       groceryValue?.value,
       groceries,
       addGrocery,
-      props.householdId,
-      props.id,
+      householdId,
+      id,
       unitValue?.value,
+      closeModal,
     ]
   )
 
@@ -111,7 +115,7 @@ const AddForm = (props: Props) => {
   }, [units])
 
   return (
-    <form onSubmit={handleSubmit(handleAddGrocery)}>
+    <form id="addShoppingListGrocery" onSubmit={handleSubmit(handleAddGrocery)}>
       <fieldset>
         <legend>Add grocery</legend>
         {error && <p>Something went wrong!</p>}
@@ -167,7 +171,6 @@ const AddForm = (props: Props) => {
           />
         </label>
         {errors.unit && <p>{(errors.unit as FieldError).message}</p>}
-        <input type="submit" />
         {isLoading && <p>Loading...</p>}
       </fieldset>
     </form>

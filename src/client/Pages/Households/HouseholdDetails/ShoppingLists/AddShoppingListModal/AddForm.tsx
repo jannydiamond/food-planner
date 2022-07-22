@@ -8,9 +8,10 @@ type AddShoppingListFormData = {
 
 type Props = {
   householdId: string
+  closeModal: () => void
 }
 
-const AddForm = (props: Props) => {
+const AddForm = ({ householdId, closeModal }: Props) => {
   const {
     register,
     handleSubmit,
@@ -22,15 +23,16 @@ const AddForm = (props: Props) => {
   const handleAddShoppingList = useCallback(
     async (data: AddShoppingListFormData) => {
       addShoppingList({
-        household_id: props.householdId,
+        household_id: householdId,
         shopping_list_name: data.shopping_list_name,
       })
+      closeModal()
     },
-    [addShoppingList, props.householdId]
+    [addShoppingList, closeModal, householdId]
   )
 
   return (
-    <form onSubmit={handleSubmit(handleAddShoppingList)}>
+    <form id="addShoppingList" onSubmit={handleSubmit(handleAddShoppingList)}>
       <fieldset>
         <legend>Add shopping list</legend>
         {error && <p>Something went wrong!</p>}
@@ -46,7 +48,6 @@ const AddForm = (props: Props) => {
         {errors.shopping_list_name && (
           <p>{errors.shopping_list_name.message}</p>
         )}
-        <input type="submit" />
         {isLoading && <p>Loading...</p>}
       </fieldset>
     </form>

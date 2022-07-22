@@ -1,71 +1,66 @@
+import { useModal } from 'client/hooks/useModal'
 import { useGetGroceriesQuery } from 'client/Redux/api/groceries'
-import {
-  useDeleteGroceryFromShoppingListMutation,
-  useGetGroceriesOfShoppingListQuery,
-  useGetShoppingListByIdQuery,
-} from 'client/Redux/api/shoppingLists'
-import { Grocery, ShoppingListHasGrocery } from 'model/types'
-import React, { useCallback, useState } from 'react'
-import AddForm from './AddForm'
-import EditForm from './EditForm'
+import { useGetGroceriesOfShoppingListQuery } from 'client/Redux/api/shoppingLists'
+import { Grocery, ShoppingList, ShoppingListHasGrocery } from 'model/types'
+import React, { useState } from 'react'
+import AddShoppingListGroceryModal from './AddShoppingListGroceryModal'
+import DeleteShoppingListGroceryModal from './DeleteShoppingListGroceryModal'
+import EditShoppingListGroceryModal from './EditShoppingListGroceryModal'
 
 type Props = {
   householdId: string
-  shoppingListId: string
+  shoppingList: ShoppingList
 }
 
-const ShoppingListGroceries = ({ householdId, shoppingListId }: Props) => {
+const ShoppingListGroceries = ({ householdId, shoppingList }: Props) => {
+  const addShoppingListGroceryModal = useModal()
+  const editShoppingListGroceryModal = useModal()
+  const deleteShoppingListGroceryModal = useModal()
+
   const [groceryToEdit, setGroceryToEdit] =
     useState<null | ShoppingListHasGrocery>(null)
-  const [isEditing, setIsEditing] = useState<boolean>(false)
-
-  const { data: shoppingList, isLoading } = useGetShoppingListByIdQuery({
-    id: shoppingListId,
-    household_id: householdId,
-  })
+  const [groceryToDelete, setGroceryToDelete] =
+    useState<null | ShoppingListHasGrocery>(null)
 
   const { data: groceries, isLoading: isLoadingGroceries } =
     useGetGroceriesQuery(undefined)
 
   const { data: shoppingListGroceries } = useGetGroceriesOfShoppingListQuery({
-    id: shoppingListId,
+    id: shoppingList.id,
     household_id: householdId,
   })
 
   const toggleEditGrocery = (grocery: ShoppingListHasGrocery) => {
-    setIsEditing(!isEditing)
     setGroceryToEdit(grocery)
+    editShoppingListGroceryModal.show()
   }
 
-  const [removeGroceryFromShoppingList] =
-    useDeleteGroceryFromShoppingListMutation()
-
-  const handleDeleteGrocery = useCallback(
-    async (grocery_id: string) => {
-      removeGroceryFromShoppingList({
-        grocery_id,
-        shopping_list_id: shoppingListId,
-        household_id: householdId,
-      })
-    },
-    [householdId, shoppingListId, removeGroceryFromShoppingList]
-  )
+  const toggleDeleteGrocery = (grocery: ShoppingListHasGrocery) => {
+    setGroceryToDelete(grocery)
+    deleteShoppingListGroceryModal.show()
+  }
 
   if (!shoppingList) return null
 
   return (
     <>
-      {isLoading || isLoadingGroceries ? (
+      {isLoadingGroceries ? (
         <p>Loading...</p>
       ) : (
         <>
-          <h2>Groceries</h2>
-          <AddForm householdId={householdId} id={shoppingListId} />
+          <h3>Groceries</h3>
+          <button onClick={addShoppingListGroceryModal.show}>Add</button>
+          <AddShoppingListGroceryModal
+            householdId={householdId}
+            shoppingListId={shoppingList.id}
+            modal={addShoppingListGroceryModal}
+          />
           {shoppingListGroceries ? (
             <ul>
               {shoppingListGroceries.map((grocery) => {
                 return (
                   <li key={grocery.grocery_id}>
+                    TODO: add in_basket checkbox
                     {
                       groceries?.find(
                         (g: Grocery) => g.id === grocery.grocery_id
@@ -77,20 +72,9 @@ const ShoppingListGroceries = ({ householdId, shoppingListId }: Props) => {
                     <button onClick={() => toggleEditGrocery(grocery)}>
                       Edit
                     </button>
-                    <button
-                      onClick={() => handleDeleteGrocery(grocery.grocery_id)}
-                    >
+                    <button onClick={() => toggleDeleteGrocery(grocery)}>
                       Delete
                     </button>
-                    {isEditing &&
-                      groceryToEdit &&
-                      groceryToEdit.grocery_id === grocery.grocery_id && (
-                        <EditForm
-                          householdId={householdId}
-                          grocery={grocery}
-                          finished={() => setIsEditing(false)}
-                        />
-                      )}
                   </li>
                 )
               })}
@@ -99,6 +83,21 @@ const ShoppingListGroceries = ({ householdId, shoppingListId }: Props) => {
             '-'
           )}
         </>
+      )}
+
+      {groceryToEdit && (
+        <EditShoppingListGroceryModal
+          householdId={householdId}
+          shoppingListGrocery={groceryToEdit}
+          modal={editShoppingListGroceryModal}
+        />
+      )}
+      {groceryToDelete && (
+        <DeleteShoppingListGroceryModal
+          householdId={householdId}
+          shoppingListGrocery={groceryToDelete}
+          modal={deleteShoppingListGroceryModal}
+        />
       )}
     </>
   )
