@@ -1,6 +1,7 @@
 import { useModal } from 'client/hooks/useModal'
 import { useGetGroceriesQuery } from 'client/Redux/api/groceries'
 import { useGetGroceriesOfInventoryQuery } from 'client/Redux/api/inventories'
+import { dateOptions } from 'client/utils/date'
 import { Grocery, Inventory, InventoryHasGrocery } from 'model/types'
 import React, { useState } from 'react'
 import AddInventoryGroceryModal from './AddInventoryGroceryModal'
@@ -57,9 +58,9 @@ const InventoryGroceries = ({ householdId, inventory }: Props) => {
           />
           {inventoryGroceries ? (
             <ul>
-              {inventoryGroceries.map((grocery) => {
+              {inventoryGroceries.map((grocery, index) => {
                 return (
-                  <li key={grocery.grocery_id}>
+                  <li key={`${grocery.grocery_id}-${index}`}>
                     {
                       groceries?.find(
                         (g: Grocery) => g.id === grocery.grocery_id
@@ -67,7 +68,11 @@ const InventoryGroceries = ({ householdId, inventory }: Props) => {
                     }
                     {grocery.amount &&
                       grocery.unit &&
-                      `: ${grocery.amount} ${grocery.unit}`}
+                      ` | ${grocery.amount} ${grocery.unit}`}
+                    {grocery.best_before &&
+                      ` | MDH: ${new Date(
+                        grocery.best_before
+                      ).toLocaleDateString('de-DE', dateOptions)}`}
                     <button onClick={() => toggleEditGrocery(grocery)}>
                       Edit
                     </button>

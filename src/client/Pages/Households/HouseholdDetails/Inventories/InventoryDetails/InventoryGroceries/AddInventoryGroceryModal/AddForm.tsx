@@ -11,6 +11,7 @@ type AddGroceryFormData = {
   grocery_id: string | null
   amount?: string | null
   unit?: string | null
+  best_before?: Date | null
 }
 
 type Props = {
@@ -57,6 +58,7 @@ const AddForm = ({ householdId, id, closeModal }: Props) => {
           inventory_id: id,
           amount: data.amount ? parseInt(data.amount) : null,
           unit: unitValue?.value ?? null,
+          best_before: data.best_before ? new Date(data.best_before) : null,
         },
       })
 
@@ -170,7 +172,11 @@ const AddForm = ({ householdId, id, closeModal }: Props) => {
           />
         </label>
         {errors.unit && <p>{(errors.unit as FieldError).message}</p>}
-        TODO: add best before date picker
+        <label htmlFor="best_before">
+          <p>Best before</p>
+          <input type="date" {...register('best_before')} />
+        </label>
+        {errors.best_before && <p>{errors.best_before.message}</p>}
         {isLoading && <p>Loading...</p>}
       </fieldset>
     </form>
