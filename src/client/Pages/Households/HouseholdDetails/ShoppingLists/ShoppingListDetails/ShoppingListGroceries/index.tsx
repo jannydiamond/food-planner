@@ -1,8 +1,11 @@
 import { useModal } from 'client/hooks/useModal'
 import { useGetGroceriesQuery } from 'client/Redux/api/groceries'
-import { useGetGroceriesOfShoppingListQuery } from 'client/Redux/api/shoppingLists'
+import {
+  useGetGroceriesOfShoppingListQuery,
+  usePutGroceryToShoppingListMutation,
+} from 'client/Redux/api/shoppingLists'
 import { Grocery, ShoppingList, ShoppingListHasGrocery } from 'model/types'
-import React, { useState } from 'react'
+import React, { ChangeEvent, useCallback, useState } from 'react'
 import AddShoppingListGroceryModal from './AddShoppingListGroceryModal'
 import DeleteShoppingListGroceryModal from './DeleteShoppingListGroceryModal'
 import EditShoppingListGroceryModal from './EditShoppingListGroceryModal'
@@ -40,6 +43,25 @@ const ShoppingListGroceries = ({ householdId, shoppingList }: Props) => {
     deleteShoppingListGroceryModal.show()
   }
 
+  const [editGrocery] = usePutGroceryToShoppingListMutation()
+
+  const handleCheckboxChange = useCallback(
+    async (
+      event: ChangeEvent<HTMLInputElement>,
+      shoppingListGrocery: ShoppingListHasGrocery
+    ) => {
+      console.log(event.target.checked)
+      editGrocery({
+        household_id: householdId,
+        item: {
+          ...shoppingListGrocery,
+          in_basket: event.target.checked,
+        },
+      })
+    },
+    [editGrocery, householdId]
+  )
+
   if (!shoppingList) return null
 
   return (
@@ -60,15 +82,24 @@ const ShoppingListGroceries = ({ householdId, shoppingList }: Props) => {
               {shoppingListGroceries.map((grocery) => {
                 return (
                   <li key={grocery.grocery_id}>
-                    TODO: add in_basket checkbox
-                    {
-                      groceries?.find(
-                        (g: Grocery) => g.id === grocery.grocery_id
-                      )?.grocery_name
-                    }
+                    <label htmlFor={`addToBasket-${grocery.grocery_id}`}>
+                      <input
+                        id={`addToBasket-${grocery.grocery_id}`}
+                        type="checkbox"
+                        onChange={(event: ChangeEvent<HTMLInputElement>) =>
+                          handleCheckboxChange(event, grocery)
+                        }
+                        checked={grocery.in_basket}
+                      />
+                      {
+                        groceries?.find(
+                          (g: Grocery) => g.id === grocery.grocery_id
+                        )?.grocery_name
+                      }
+                    </label>
                     {grocery.amount &&
                       grocery.unit &&
-                      `: ${grocery.amount} ${grocery.unit}`}
+                      ` | ${grocery.amount} ${grocery.unit}`}
                     <button onClick={() => toggleEditGrocery(grocery)}>
                       Edit
                     </button>
