@@ -1,10 +1,11 @@
+import Select from 'client/components/__styled__/Select'
 import { usePutGroceryToInventoryMutation } from 'client/Redux/api/inventories'
 import { useGetAllUnitsQuery } from 'client/Redux/api/units'
 import { SelectOption } from 'client/types'
 import { InventoryHasGrocery, Unit } from 'model/types'
 import React, { useCallback, useEffect, useState } from 'react'
 import { Controller, FieldError, useForm } from 'react-hook-form'
-import Select, { OnChangeValue } from 'react-select'
+import { OnChangeValue } from 'react-select'
 
 type Props = {
   householdId: string
@@ -107,6 +108,7 @@ const EditForm = ({ householdId, inventoryGrocery, closeModal }: Props) => {
               <Select
                 {...field}
                 id="unit"
+                classNamePrefix="ReactSelect"
                 isSearchable
                 options={unitOptions}
                 value={unitValue}

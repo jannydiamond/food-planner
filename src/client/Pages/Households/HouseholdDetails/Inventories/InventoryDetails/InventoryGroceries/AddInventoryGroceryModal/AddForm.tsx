@@ -4,8 +4,9 @@ import React, { useCallback, useEffect, useState } from 'react'
 import { Controller, FieldError, useForm } from 'react-hook-form'
 import { SelectOption } from 'client/types'
 import { Grocery, Unit } from 'model/types'
-import Select, { OnChangeValue } from 'react-select'
+import { OnChangeValue } from 'react-select'
 import { useGetAllUnitsQuery } from 'client/Redux/api/units'
+import Select from 'client/components/__styled__/Select'
 
 type AddGroceryFormData = {
   grocery_id: string | null
@@ -98,7 +99,7 @@ const AddForm = ({ householdId, id, closeModal }: Props) => {
         }
       })
 
-      setGroceryOptions([{ value: null, label: 'No Grocery' }, ...options])
+      setGroceryOptions([...options])
     }
   }, [groceries])
 
@@ -129,6 +130,7 @@ const AddForm = ({ householdId, id, closeModal }: Props) => {
               <Select
                 {...field}
                 id="grocery_id"
+                classNamePrefix="ReactSelect"
                 isSearchable
                 options={groceryOptions}
                 value={groceryValue}
@@ -159,6 +161,7 @@ const AddForm = ({ householdId, id, closeModal }: Props) => {
               <Select
                 {...field}
                 id="unit"
+                classNamePrefix="ReactSelect"
                 isSearchable
                 options={unitOptions}
                 value={unitValue}

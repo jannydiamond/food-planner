@@ -1,10 +1,11 @@
+import Select from 'client/components/__styled__/Select'
 import { usePutGroceryToShoppingListMutation } from 'client/Redux/api/shoppingLists'
 import { useGetAllUnitsQuery } from 'client/Redux/api/units'
 import { SelectOption } from 'client/types'
 import { ShoppingListHasGrocery, Unit } from 'model/types'
 import React, { useCallback, useEffect, useState } from 'react'
 import { Controller, FieldError, useForm } from 'react-hook-form'
-import Select, { OnChangeValue } from 'react-select'
+import { OnChangeValue } from 'react-select'
 
 type Props = {
   householdId: string
@@ -118,6 +119,7 @@ const EditForm = ({ householdId, shoppingListGrocery, closeModal }: Props) => {
               <Select
                 {...field}
                 id="unit"
+                classNamePrefix="ReactSelect"
                 isSearchable
                 options={unitOptions}
                 value={unitValue}
