@@ -3,8 +3,9 @@ import { SelectOption } from 'client/types'
 import { Grocery, Unit } from 'model/types'
 import React, { useCallback, useEffect, useState } from 'react'
 import { Controller, FieldError, useForm } from 'react-hook-form'
-import Select, { OnChangeValue } from 'react-select'
+import { OnChangeValue } from 'react-select'
 import { useGetAllUnitsQuery } from 'client/Redux/api/units'
+import Select from 'client/components/__styled__/Select'
 
 type Props = {
   grocery: Grocery
@@ -147,6 +148,7 @@ const EditForm = ({ grocery, closeModal }: Props) => {
               <Select
                 {...field}
                 id="base_unit"
+                classNamePrefix="ReactSelect"
                 isSearchable
                 options={unitOptions}
                 value={baseUnitValue}
@@ -180,6 +182,7 @@ const EditForm = ({ grocery, closeModal }: Props) => {
               <Select
                 {...field}
                 id="alt_unit"
+                classNamePrefix="ReactSelect"
                 isSearchable
                 options={unitOptions}
                 value={altUnitValue}
